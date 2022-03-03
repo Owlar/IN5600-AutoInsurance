@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 
 public class LoginActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.model;
 
 import androidx.annotation.NonNull;
 
