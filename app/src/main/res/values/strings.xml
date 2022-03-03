@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">IN5600-AutoInsurance</string>
+    <string name="company">AutoInsurance</string>
+    <string name="email_login">Email</string>
+    <string name="password_login">Password</string>
+    <string name="button_txt_login">Login</string>
 </resources>
