@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: Create RequestQueue as a Singleton
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "//methodPostRemoteLogin", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostRemoteLogin", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
