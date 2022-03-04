@@ -26,6 +26,7 @@ import java.util.Map;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,8 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Create RequestQueue as a Singleton
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = VolleySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostRemoteLogin", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -98,6 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                 return map;
             }
         };
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }
