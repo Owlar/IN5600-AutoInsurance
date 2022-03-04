@@ -1,8 +1,10 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 
 public class MainActivity extends AppCompatActivity {
 
