@@ -31,6 +31,13 @@
             android:layout_height="wrap_content"
             android:onClick="login"
             android:text="@string/button_txt_login"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="skipLogin"
+            android:text="Skip login"
+            />
     </TableLayout>
 
 

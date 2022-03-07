@@ -100,4 +100,9 @@ public class LoginActivity extends AppCompatActivity {
         };
         requestQueue.add(stringRequest);
     }
+
+    public void skipLogin(View view) {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
 }
