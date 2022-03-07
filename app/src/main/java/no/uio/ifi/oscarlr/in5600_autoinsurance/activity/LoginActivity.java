@@ -1,5 +1,11 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
 
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_EMAIL;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_FIRST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_ID;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_LAST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.SHARED_PREFERENCES;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,12 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
 
     private static final String URL = "http://10.0.2.2:8080";
-    private static final String SHARED_PREFERENCES = "SharedPreferences";
-
-    private static final String KEY_ID = "KeyID";
-    private static final String KEY_FIRST_NAME = "KeyFirstName";
-    private static final String KEY_LAST_NAME = "KeyLastName";
-    private static final String KEY_EMAIL = "KeyEmail";
 
     private EditText email;
     private EditText password;
@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         // If user is already logged in, go directly to MainActivity
         if (sharedPreferences.getString(KEY_FIRST_NAME, null) != null) {
             Log.i(TAG, "User is already logged in.");
-            finish();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -99,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(KEY_EMAIL, user.getEmail());
                     editor.apply();
 
-                    finish();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } catch (JSONException jsonException) {

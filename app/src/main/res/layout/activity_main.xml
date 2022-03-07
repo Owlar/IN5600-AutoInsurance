@@ -16,6 +16,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/see_existing_insurance_claims_main" />
+        android:text="@string/see_existing_insurance_claims_main"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out_main"
+        android:onClick="logout" />
 
 </LinearLayout>
