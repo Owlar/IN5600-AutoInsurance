@@ -7,4 +7,6 @@
     <string name="new_insurance_claim_main">New insurance claim</string>
     <string name="see_existing_insurance_claims_main">See existing insurance claims</string>
     <string name="log_out_main">Logout</string>
+    <string name="skip_login">Skip login</string>
+    <string name="profile_text">Profile</string>
 </resources>

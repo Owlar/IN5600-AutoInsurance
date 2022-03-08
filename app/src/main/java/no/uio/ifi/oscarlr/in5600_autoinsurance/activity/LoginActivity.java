@@ -122,4 +122,10 @@ public class LoginActivity extends AppCompatActivity {
         };
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+    public void skipLogin(View view) {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("ID_KEY", "1");
+        startActivity(intent);
+    }
 }
