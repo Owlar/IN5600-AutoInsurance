@@ -1,10 +1,10 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_EMAIL;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_FIRST_NAME;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_ID;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_LAST_NAME;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_EMAIL;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_FIRST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
 import android.content.Context;
 import android.content.Intent;

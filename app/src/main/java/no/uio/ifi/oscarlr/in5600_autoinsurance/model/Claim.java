@@ -1,7 +1,5 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.model;
 
-import java.util.ArrayList;
-
 public class Claim {
     public String id;
     public String numberOfClaims;

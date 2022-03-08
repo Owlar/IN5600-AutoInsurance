@@ -1,18 +1,9 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.SHARED_PREFERENCES;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.databinding.ActivityMainBinding;
@@ -21,9 +12,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
-
-    public String userId;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

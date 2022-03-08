@@ -1,30 +1,26 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.KEY_ID;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 
 import org.json.JSONArray;
@@ -32,23 +28,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.MainActivity;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    List<Claim> claims;
-    RecyclerViewAdapter recyclerViewAdapter;
-    SharedPreferences sharedPreferences;
+    private RecyclerView recyclerView;
+    private List<Claim> claims;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private SharedPreferences sharedPreferences;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -71,13 +63,11 @@ public class HomeFragment extends Fragment {
 
 
         RequestQueue requestQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
-        String url = "http://10.0.2.2:8080";
         int userId = sharedPreferences.getInt(KEY_ID, 0);
 
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url +"/getMethodMyClaims?id=" + userId, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userId, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Home", response.toString());
                 try {
                     int numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
                     JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");
