@@ -9,4 +9,10 @@
     <string name="log_out_main">Logout</string>
     <string name="skip_login">Skip login</string>
     <string name="profile_text">Profile</string>
+    <string name="no_claims_available">No claims available</string>
+    <string name="content_description_floating_action_button">Add new claim</string>
+    <string name="back_text_button">Back</string>
+    <string name="next_text_button">Next</string>
+    <string name="finish_text_button">Finish</string>
+    <string name="new_claim">New claim</string>
 </resources>
