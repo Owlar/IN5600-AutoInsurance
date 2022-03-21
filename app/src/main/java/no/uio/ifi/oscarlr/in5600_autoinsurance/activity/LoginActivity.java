@@ -5,6 +5,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +40,6 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 public class LoginActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
-
-    private static final String URL = "http://10.0.2.2:8080";
 
     private EditText email;
     private EditText password;

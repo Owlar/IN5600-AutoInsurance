@@ -12,11 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
 
 public class ProfileFragment extends Fragment {
+
+    private SharedPreferences sharedPreferences;
 
 
     public ProfileFragment() {
@@ -27,6 +30,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -34,18 +39,33 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button button = view.findViewById(R.id.logout_profile_fragment);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button changePasswordButton = view.findViewById(R.id.change_password_profile_fragment);
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToChangePasswordFragment();
+            }
+        });
+
+        Button logoutButton = view.findViewById(R.id.logout_profile_fragment);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
             }
         });
+
         return view;
     }
 
+    public void goToChangePasswordFragment() {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new ChangePasswordFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     public void logout() {
-        SharedPreferences sharedPreferences = requireActivity().getApplicationContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();

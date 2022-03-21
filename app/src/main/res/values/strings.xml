@@ -9,4 +9,8 @@
     <string name="log_out_main">Logout</string>
     <string name="skip_login">Skip login</string>
     <string name="profile_text">Profile</string>
+    <string name="change_password_profile">Change password</string>
+    <string name="change_password">Change</string>
+    <string name="type_a_new_password">Type a new password</string>
+    <string name="confirm_the_new_password">Confirm the new password</string>
 </resources>
