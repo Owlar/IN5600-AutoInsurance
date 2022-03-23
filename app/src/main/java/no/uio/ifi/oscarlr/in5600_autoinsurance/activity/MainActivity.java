@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.databinding.ActivityMainBinding;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.HomeFragment;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.MapFragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.profile) {
                 loadFragment(new ProfileFragment());
+            } else if (item.getItemId() == R.id.map) {
+                loadFragment(new MapFragment());
             }
             return true;
         });
