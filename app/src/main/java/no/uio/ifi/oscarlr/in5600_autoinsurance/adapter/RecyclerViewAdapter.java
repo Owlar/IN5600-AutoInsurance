@@ -45,8 +45,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.description.setText(claims.get(0).claimDes.get(position)); //TODO 0 til personID
-        holder.description.setText(claims.get(0).claimDes);
+//        holder.description.setText(claims.get(0).claimDes.get(position));
+        holder.description.setText(claims.get(position).claimDes);
 //        holder.photo.setText(claims.get(0).claimPhoto.get(position));
 //        holder.location.setText(claims.get(0).claimLocation.get(position));
 //        holder.status.setText(claims.get(0).claimStatus.get(position));
