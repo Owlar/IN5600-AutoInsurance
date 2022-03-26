@@ -1,6 +1,9 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.adapter;
 
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     LayoutInflater inflater;
@@ -40,6 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.recycler_view_card_element, parent, false);
+
+        DataProcessor dataProcessor = new DataProcessor(inflater.getContext());
+        dataProcessor.saveClaims(claims);
+
         return new ViewHolder(view);
     }
 
