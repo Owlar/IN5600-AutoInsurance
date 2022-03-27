@@ -39,6 +39,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimDialogFragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 
 public class HomeFragment extends Fragment {
@@ -107,6 +108,8 @@ public class HomeFragment extends Fragment {
 
                 recyclerViewAdapter.notifyDataSetChanged();
 
+                saveToLocalStorage(claims);
+
                 if (numberOfClaims == 0) {
                     view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.VISIBLE);
                 }
@@ -122,6 +125,13 @@ public class HomeFragment extends Fragment {
         });
 
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(objectRequest);
+    }
+
+    private void saveToLocalStorage(List<Claim> claims) {
+        DataProcessor dataProcessor = new DataProcessor(getContext());
+        dataProcessor.setClaims(claims);
+        /*for (Claim claim : dataProcessor.getClaims())
+            System.out.println(claim);*/
     }
 
 }

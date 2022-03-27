@@ -78,4 +78,9 @@ public class Claim {
     public void setClaimStatus(String claimStatus) {
         this.claimStatus = claimStatus;
     }
+
+    @Override
+    public String toString() {
+        return claimId + ": " + claimDes;
+    }
 }
