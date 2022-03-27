@@ -35,12 +35,14 @@ public class NewClaimSummaryScreen extends Fragment {
     private final DialogFragment dialogFragment;
     private final NewClaimSingleton newClaimSingleton;
     private final SharedPreferences sharedPreferences;
+    private final int replaceClaimWithID;
 
-    public NewClaimSummaryScreen(ViewPager2 viewPager, DialogFragment dialogFragment) {
+    public NewClaimSummaryScreen(ViewPager2 viewPager, DialogFragment dialogFragment, int replaceClaimWithID) {
         this.viewPager = viewPager;
         this.dialogFragment = dialogFragment;
         newClaimSingleton = NewClaimSingleton.getInstance();
         sharedPreferences = dialogFragment.requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        this.replaceClaimWithID = replaceClaimWithID;
     }
 
     @Override
@@ -52,31 +54,16 @@ public class NewClaimSummaryScreen extends Fragment {
         view.findViewById(R.id.backButtonSummaryScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(3));
 
         view.findViewById(R.id.finishButtonSummaryScreen).setOnClickListener(view1 -> {
+            StringRequest stringRequest;
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,  URL+ "/postInsertNewClaim", new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                }
-            }) {
-                @NonNull
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
-                    map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
-                    map.put("newClaimDes", newClaimSingleton.getClaimDes());
-                    map.put("newClaimPho", "na");
-                    map.put("newClaimLoc", "na");
-                    map.put("newClaimSta", "na");
-                    return map;
-                }
-            };
+            if (replaceClaimWithID == -1) {
+                // Don't replace, make new claim
+                stringRequest = postInsertNewClaim();
+            }
+            else {
+                // Replace claim
+                stringRequest = postUpdateClaim();
+            }
 
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
@@ -84,5 +71,59 @@ public class NewClaimSummaryScreen extends Fragment {
         });
 
         return view;
+    }
+
+    private StringRequest postInsertNewClaim() {
+        return new StringRequest(Request.Method.POST,  URL+ "/postInsertNewClaim", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
+                map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
+                map.put("newClaimDes", newClaimSingleton.getClaimDes());
+                map.put("newClaimPho", "na");
+                map.put("newClaimLoc", "na");
+                map.put("newClaimSta", "na");
+                return map;
+            }
+        };
+    }
+
+    private StringRequest postUpdateClaim() {
+        return new StringRequest(Request.Method.POST, URL + "/postUpdateClaim", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
+                map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
+                map.put("updateClaimDes", newClaimSingleton.getClaimDes());
+                map.put("updateClaimPho", "na");
+                map.put("updateClaimLoc", "na");
+                map.put("updateClaimSta", "na");
+                return map;
+            }
+        };
     }
 }

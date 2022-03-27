@@ -8,14 +8,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +31,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 
 import org.json.JSONArray;
@@ -45,6 +51,8 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 public class HomeFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
+    private int numberOfClaims = 0;
+    private final int MAX_NUMBER_OF_CLAIMS = 5;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,19 +74,12 @@ public class HomeFragment extends Fragment {
         createRecyclerView(view);
 
         view.findViewById(R.id.floating_action_button).setOnClickListener(view1 -> {
-            DialogFragment dialogFragment = new NewClaimDialogFragment();
-            dialogFragment.show(requireActivity().getSupportFragmentManager(), "tag");
-
-            // Handle dialog dismiss and recreate the RecyclerView
-            getParentFragmentManager().registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
-                @Override
-                public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-                    super.onFragmentViewDestroyed(fm, f);
-                    getParentFragmentManager().unregisterFragmentLifecycleCallbacks(this);
-
-                    createRecyclerView(view);
-                }
-            }, false);
+            if (numberOfClaims >= MAX_NUMBER_OF_CLAIMS) {
+                handleMaxClaimsCase(view);
+            }
+            else {
+                startNewClaim(view, -1);
+            }
         });
     }
 
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment {
         @SuppressLint("NotifyDataSetChanged") JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
 //            Log.d("Home", response.toString());
             try {
-                int numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
+                numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
                 newClaimSingleton.setNumberOfClaims(numberOfClaims);
                 JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");
 
@@ -132,6 +133,65 @@ public class HomeFragment extends Fragment {
         dataProcessor.setClaims(claims);
         /*for (Claim claim : dataProcessor.getClaims())
             System.out.println(claim);*/
+    }
+
+    // Shows alert dialog. Can only click "Ok" with correct input
+    private void handleMaxClaimsCase(View view) {
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Max claims reached, provide ID of claim to replace (0-4):");
+
+        final EditText editText = new EditText(requireContext());
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(editText);
+
+        builder.setPositiveButton("Ok", (dialogInterface, i) -> {
+            int claimIDToReplace = Integer.parseInt(editText.getText().toString());
+            startNewClaim(view, claimIDToReplace);
+        });
+
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            dialogInterface.cancel();
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    int claimIdToReplace = Integer.parseInt(editable.toString());
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(claimIdToReplace >= 0 && claimIdToReplace < 5);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
+            }
+        });
+    }
+
+    public void startNewClaim(View view, int replaceClaimWithID) {
+        DialogFragment dialogFragment = new NewClaimDialogFragment(replaceClaimWithID);
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "tag");
+
+        // Handle dialog dismiss and recreate the RecyclerView
+        getParentFragmentManager().registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
+            @Override
+            public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
+                super.onFragmentViewDestroyed(fm, f);
+                getParentFragmentManager().unregisterFragmentLifecycleCallbacks(this);
+
+                createRecyclerView(view);
+            }
+        }, false);
     }
 
 }

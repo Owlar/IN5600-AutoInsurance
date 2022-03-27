@@ -24,6 +24,13 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 
 public class NewClaimDialogFragment extends DialogFragment {
 
+    private final int replaceClaimWithID;
+
+    public NewClaimDialogFragment(int replaceClaimWithID) {
+        this.replaceClaimWithID = replaceClaimWithID;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +53,7 @@ public class NewClaimDialogFragment extends DialogFragment {
                 new NewClaimDescriptionScreen(viewPager),
                 new NewClaimPhotoScreen(viewPager),
                 new NewClaimLocationScreen(viewPager),
-                new NewClaimSummaryScreen(viewPager, this)
+                new NewClaimSummaryScreen(viewPager, this, replaceClaimWithID)
         ));
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle(), fragmentList);
         viewPager.setAdapter(viewPagerAdapter);
