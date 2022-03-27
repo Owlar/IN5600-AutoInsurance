@@ -32,8 +32,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/screenTwoTitle" />
 
-
-
+    <com.google.android.gms.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/new_claim_map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/screenTwoSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/backButtonLocationScreen" />
 
     <TextView
         android:id="@+id/backButtonLocationScreen"

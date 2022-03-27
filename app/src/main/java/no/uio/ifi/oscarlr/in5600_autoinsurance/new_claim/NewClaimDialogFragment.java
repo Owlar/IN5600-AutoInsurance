@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -36,6 +37,10 @@ public class NewClaimDialogFragment extends DialogFragment {
         NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
 
         ViewPager2 viewPager = view.findViewById(R.id.ViewPager);
+
+        // For GoogleMaps and overall consistency between pages
+        viewPager.setUserInputEnabled(false);
+
         ArrayList<Fragment> fragmentList = new ArrayList<>(Arrays.asList(
                 new NewClaimIntroScreen(viewPager),
                 new NewClaimDescriptionScreen(viewPager),
