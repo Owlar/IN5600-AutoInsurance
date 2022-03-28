@@ -70,8 +70,6 @@ public class ProfileFragment extends Fragment {
         editor.clear();
         editor.apply();
 
-        // TODO: Delete the user's claims and any other internal data
-
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
 

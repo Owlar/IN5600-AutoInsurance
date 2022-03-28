@@ -131,8 +131,6 @@ public class HomeFragment extends Fragment {
     private void saveToLocalStorage(List<Claim> claims) {
         DataProcessor dataProcessor = new DataProcessor(getContext());
         dataProcessor.setClaims(claims);
-        /*for (Claim claim : dataProcessor.getClaims())
-            System.out.println(claim);*/
     }
 
     // Shows alert dialog. Can only click "Ok" with correct input
