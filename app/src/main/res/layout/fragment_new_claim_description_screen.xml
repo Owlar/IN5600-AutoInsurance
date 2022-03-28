@@ -33,6 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/screenTwoTitle" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/screenTwoClaimDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/screenTwoSubtitle"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="12dp"
-        android:hint="Write about..."
-        >
+        android:hint="Write about...">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
