@@ -17,23 +17,12 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     LayoutInflater inflater;
     List<Claim> claims;
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public RecyclerViewAdapter(Context context, List<Claim> claims) {
+    public RecyclerViewAdapter(Context context, List<Claim> claims, RecyclerViewInterface recyclerViewInterface) {
         this.inflater = LayoutInflater.from(context);
         this.claims = claims;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView description, photo, location, status;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            description = view.findViewById(R.id.t1);
-            photo = view.findViewById(R.id.t2);
-            location = view.findViewById(R.id.t3);
-            status = view.findViewById(R.id.t4);
-        }
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
@@ -41,7 +30,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.recycler_view_card_element, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -58,5 +47,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return claims.size();
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView description, photo, location, status;
 
+        public ViewHolder(View itemView, RecyclerViewInterface recyclerViewInterface) {
+            super(itemView);
+
+            description = itemView.findViewById(R.id.cardDescription);
+//            photo = itemView.findViewById(R.id.t2);
+//            location = itemView.findViewById(R.id.t3);
+//            status = itemView.findViewById(R.id.t4);
+
+            itemView.findViewById(R.id.cardReplaceButton).setOnClickListener(view -> {
+                if (recyclerViewInterface != null) {
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onReplaceClick(position);
+                    }
+                }
+            });
+        }
+    }
 }
