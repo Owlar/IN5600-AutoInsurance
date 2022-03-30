@@ -1,0 +1,55 @@
+<resources>
+    <!-- Project -->
+    <string name="app_name">IN5600-AutoInsurance</string>
+    <string name="company">AutoInsurance</string>
+
+    <!-- LoginActivity -->
+    <string name="email_login">Email</string>
+    <string name="password_login">Password</string>
+    <string name="button_txt_login">Login</string>
+    <string name="skip_login">Skip login</string>
+
+    <!-- HomeFragment -->
+    <string name="new_insurance_claim_home">New insurance claim</string>
+    <string name="see_existing_insurance_claims_home">See existing insurance claims</string>
+    <string name="no_claims_available_home">No claims available</string>
+    <string name="floating_action_button_home">Add new claim</string>
+
+    <!-- ProfileFragment -->
+    <string name="log_out_profile">Logout</string>
+    <string name="change_password_profile">Change password</string>
+
+    <!-- Dialog -->
+    <string name="new_claim_dialog">New claim</string>
+
+    <!-- ChangePasswordFragment -->
+    <string name="change_password_change_password">Change</string>
+    <string name="type_a_new_password_change_password">Type a new password</string>
+    <string name="confirm_the_new_password_change_password">Confirm the new password</string>
+
+    <!-- ViewPager2 -->
+    <string name="new_claim_description">1. Description</string>
+    <string name="new_claim_description_write_about">Write about…</string>
+    <string name="new_claim_intro_description">1. Description</string>
+    <string name="new_claim_photo_title">2. Photo</string>
+    <string name="new_claim_location_title">3. Location</string>
+    <string name="new_claim_location_button_text">My Location</string>
+    <string name="new_claim_dotdotdot_subtitle">…</string>
+    <string name="new_claim_summary_title">Summary</string>
+
+    <string name="back_text_button">Back</string>
+    <string name="next_text_button">Next</string>
+    <string name="finish_text_button">Finish</string>
+
+    <!-- Cards (claims) in RecyclerView -->
+    <string name="claim_card_description">Description</string>
+    <string name="claim_card_photo">Photo</string>
+    <string name="claim_card_location">Location</string>
+    <string name="claim_card_status">Status</string>
+
+    <!-- BottomNavigation -->
+    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_map">Map</string>
+    <string name="bottom_navigation_profile">Profile</string>
+
+</resources>

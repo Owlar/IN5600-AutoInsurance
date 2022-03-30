@@ -1,0 +1,158 @@
+[
+  {
+    "id": "0",
+    "numberOfClaims": "5",
+    "claimId": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "claimDes": [
+      "",
+      "Test",
+      "test",
+      "Oscar",
+      "s"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimStatus": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  },
+  {
+    "id": "1",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimStatus": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  },
+  {
+    "id": "2",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimStatus": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  },
+  {
+    "id": "3",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimStatus": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  }
+]

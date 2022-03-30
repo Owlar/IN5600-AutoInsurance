@@ -1,0 +1,130 @@
+[
+  {
+    "id": "0",
+    "numberOfClaims": "2",
+    "claimId": [
+      "0",
+      "1",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "desc00",
+      "desc01",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "phot00",
+      "phot01",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "50-10",
+      "50-15",
+      "na",
+      "na",
+      "na"
+    ]
+ },
+  {
+    "id": "1",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  },
+  {
+    "id": "2",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  },
+  {
+    "id": "3",
+    "numberOfClaims": "0",
+    "claimId": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimDes": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimPhoto": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ],
+    "claimLocation": [
+      "na",
+      "na",
+      "na",
+      "na",
+      "na"
+    ]
+  }
+]
