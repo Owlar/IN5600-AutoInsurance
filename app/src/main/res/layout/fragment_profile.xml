@@ -14,7 +14,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/see_existing_insurance_claims_main"
+            android:text="@string/see_existing_insurance_claims_home"
             android:layout_marginBottom="20dp" />
 
         <Button
@@ -28,9 +28,8 @@
             android:id="@+id/logout_profile_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/log_out_main" />
+            android:text="@string/log_out_profile" />
 
     </LinearLayout>
-
 
 </FrameLayout>

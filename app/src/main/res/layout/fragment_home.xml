@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/no_claims_available" />
+        android:text="@string/no_claims_available_home" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
@@ -25,5 +25,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_add_24"
-        android:contentDescription="@string/content_description_floating_action_button" />
+        android:contentDescription="@string/floating_action_button_home" />
+
 </FrameLayout>

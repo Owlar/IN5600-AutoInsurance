@@ -33,11 +33,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/fullscreenDialogClose"
-                android:text="@string/new_claim" />
+                android:text="@string/new_claim_dialog" />
 
         </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
 
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/ViewPager"

@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Home"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:id="@+id/home"/>
-    <item android:title="Map"
-        android:icon="@drawable/ic_baseline_map_24"
-        android:id="@+id/map" />
-    <item android:title="Profile"
-        android:icon="@drawable/ic_baseline_person_24"
-        android:id="@+id/profile"/>
+        android:id="@+id/home"
+        android:title="@string/bottom_navigation_home"
+        android:icon="@drawable/ic_baseline_home_24" />
+    <item
+        android:id="@+id/map"
+        android:title="@string/bottom_navigation_map"
+        android:icon="@drawable/ic_baseline_map_24" />
+    <item
+        android:id="@+id/profile"
+        android:title="@string/bottom_navigation_profile"
+        android:icon="@drawable/ic_baseline_person_24" />
+
 </menu>

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="1. Description"
+        android:text="@string/new_claim_description"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Write about ..."
+        android:text="@string/new_claim_description_write_about"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/screenTwoSubtitle"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="12dp"
-        android:hint="Write about...">
+        android:hint="@string/new_claim_description_write_about">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -76,6 +76,5 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

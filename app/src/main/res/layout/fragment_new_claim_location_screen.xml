@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="3. Location"
+        android:text="@string/new_claim_location_title"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text=" ..."
+        android:text="@string/new_claim_dotdotdot_subtitle"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -36,12 +36,12 @@
         android:id="@+id/screenLocationMyPositionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Location"
+        android:text="@string/new_claim_location_button_text"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/screenTwoSubtitle"
-        app:layout_constraintBottom_toTopOf="@id/new_claim_map"/>
+        app:layout_constraintBottom_toTopOf="@id/new_claim_map" />
 
     <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
@@ -77,6 +77,5 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
