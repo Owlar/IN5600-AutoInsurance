@@ -42,10 +42,14 @@
     <string name="finish_text_button">Finish</string>
 
     <!-- Cards (claims) in RecyclerView -->
+    <string name="claim_card_title">Title (date maybe?)</string>
     <string name="claim_card_description">Description</string>
     <string name="claim_card_photo">Photo</string>
     <string name="claim_card_location">Location</string>
     <string name="claim_card_status">Status</string>
+    <string name="claim_card_image_contentDescription">Image from claim</string>
+    <string name="claim_card_replace_button_text">Replace</string>
+    <string name="claim_card_delete_button_text">Delete</string>
 
     <!-- BottomNavigation -->
     <string name="bottom_navigation_home">Home</string>
