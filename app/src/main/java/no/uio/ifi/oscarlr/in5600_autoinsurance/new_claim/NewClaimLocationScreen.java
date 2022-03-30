@@ -34,7 +34,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks {
+public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener {
 
     private final ViewPager2 viewPager;
 
@@ -85,6 +85,8 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         mMap = googleMap;
 
         myLocationButton.setVisibility(View.VISIBLE);
+        setMapClickListeners();
+        setUISettings();
     }
 
     @AfterPermissionGranted(PERMISSION_LOCATION_ID)
@@ -101,7 +103,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
                                 public void onSuccess(Location location) {
                                     if (location != null) {
                                         lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                                        Log.i(TAG, lastPosition.toString());
+                                        logLastPosition();
 
                                         if (createMarker() != null) {
                                             goToMarkedPosition();
@@ -132,6 +134,39 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastPosition, 13));
     }
 
+    private void setMapClickListeners() {
+        mMap.setOnMapClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+    }
+
+    private void setUISettings() {
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setAllGesturesEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+    }
+
+    @Override
+    public void onMapClick(@NonNull LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        // TODO: Potentially change title and snippet to those set in previous pages in ViewPager
+        markerOptions.title("My Position");
+        markerOptions.snippet("My Description");
+        markerOptions.position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+        mMap.clear();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+        mMap.addMarker(markerOptions);
+
+        lastPosition = latLng;
+
+        logLastPosition();
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        Log.i(TAG, "Clicked on marker " + marker.getId() + "'s InfoWindow");
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -140,6 +175,18 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         // TODO: Fix onResume loop on "Don't allow" permission
 
         getUserLocation();
+    }
+
+    // User should be able to change position of claim to that of an existing marker's position by clicking on it
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        lastPosition = marker.getPosition();
+        logLastPosition();
+        return true;
+    }
+
+    private void logLastPosition() {
+        Log.i(TAG, "Last position is " + lastPosition);
     }
 
     @Override
