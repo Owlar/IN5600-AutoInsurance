@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener {
 
     private final ViewPager2 viewPager;
+    private final NewClaimSingleton newClaimSingleton;
 
     private final int PERMISSION_LOCATION_ID = 1;
     private final String TAG = "NewClaimLocationScreen";
@@ -44,10 +46,11 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     private GoogleMap mMap = null;
     private Button myLocationButton;
     private FusedLocationProviderClient fusedLocationProviderClient = null;
-    private LatLng lastPosition;
+    private LatLng lastPosition = null;
 
     public NewClaimLocationScreen(ViewPager2 viewPager) {
         this.viewPager = viewPager;
+        newClaimSingleton = NewClaimSingleton.getInstance();
     }
 
 
@@ -60,7 +63,14 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         // TODO: Refactor view1 below and ID's in ViewPager2 XML files
         view.findViewById(R.id.backButtonLocationScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(2));
 
-        view.findViewById(R.id.nextButtonLocationScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(4));
+        view.findViewById(R.id.nextButtonLocationScreen).setOnClickListener(view1 -> {
+            if (lastPosition == null) {
+                Toast.makeText(requireContext(), "Please choose a claim position", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            viewPager.setCurrentItem(4);
+            newClaimSingleton.setClaimPosition(lastPosition);
+        });
 
         // Needed because of ViewPager
         MapView mapView = view.findViewById(R.id.new_claim_map);

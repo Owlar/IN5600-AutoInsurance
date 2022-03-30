@@ -1,9 +1,12 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class NewClaimSingleton {
     private static NewClaimSingleton instance;
     private String claimDes = "";
     private String claimPhoto = "";
+    private LatLng claimPosition;
     private String numberOfClaims = "0";
 
     private NewClaimSingleton () {
@@ -23,6 +26,14 @@ public class NewClaimSingleton {
 
     public String getClaimDes() {
         return claimDes;
+    }
+
+    public void setClaimPosition(LatLng latLng) {
+        this.claimPosition = latLng;
+    }
+
+    public LatLng getClaimPosition() {
+        return claimPosition;
     }
 
     public String getNumberOfClaims() {
