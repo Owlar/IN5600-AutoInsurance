@@ -8,19 +8,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,8 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.divider.MaterialDividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,13 +35,14 @@ import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewInterface;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimDialogFragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     private SharedPreferences sharedPreferences;
     private int numberOfClaims = 0;
@@ -75,7 +69,7 @@ public class HomeFragment extends Fragment {
 
         view.findViewById(R.id.floating_action_button).setOnClickListener(view1 -> {
             if (numberOfClaims >= MAX_NUMBER_OF_CLAIMS) {
-                handleMaxClaimsCase(view);
+                Toast.makeText(getActivity(), "Max claims reached. Replace or delete a claim", Toast.LENGTH_LONG).show();
             }
             else {
                 startNewClaim(view, -1);
@@ -86,9 +80,8 @@ public class HomeFragment extends Fragment {
     private void createRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new MaterialDividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL));
         List<Claim> claims = new ArrayList<>();
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), claims);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), claims, this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
         int userID = sharedPreferences.getInt(KEY_ID, 0);
@@ -133,49 +126,6 @@ public class HomeFragment extends Fragment {
         dataProcessor.setClaims(claims);
     }
 
-    // Shows alert dialog. Can only click "Ok" with correct input
-    private void handleMaxClaimsCase(View view) {
-        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Max claims reached, provide ID of claim to replace (0-4):");
-
-        final EditText editText = new EditText(requireContext());
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(editText);
-
-        builder.setPositiveButton("Ok", (dialogInterface, i) -> {
-            int claimIDToReplace = Integer.parseInt(editText.getText().toString());
-            startNewClaim(view, claimIDToReplace);
-        });
-
-        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
-            dialogInterface.cancel();
-        });
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                try {
-                    int claimIdToReplace = Integer.parseInt(editable.toString());
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(claimIdToReplace >= 0 && claimIdToReplace < 5);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                }
-            }
-        });
-    }
-
     public void startNewClaim(View view, int replaceClaimWithID) {
         DialogFragment dialogFragment = new NewClaimDialogFragment(replaceClaimWithID);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "tag");
@@ -192,4 +142,8 @@ public class HomeFragment extends Fragment {
         }, false);
     }
 
+    @Override
+    public void onReplaceClick(int position) {
+        startNewClaim(getView(), position);
+    }
 }
