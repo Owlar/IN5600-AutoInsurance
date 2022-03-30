@@ -19,4 +19,5 @@
     <string name="change_password">Change</string>
     <string name="type_a_new_password">Type a new password</string>
     <string name="confirm_the_new_password">Confirm the new password</string>
+    <string name="cardView_image_contentDescription">Image from claim</string>
 </resources>
