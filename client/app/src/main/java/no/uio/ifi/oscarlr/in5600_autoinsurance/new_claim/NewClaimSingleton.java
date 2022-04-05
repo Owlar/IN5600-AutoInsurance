@@ -44,4 +44,11 @@ public class NewClaimSingleton {
         this.numberOfClaims = String.valueOf(numberOfClaims);
     }
 
+    public void setClaimPhoto(String claimPhoto) {
+        this.claimPhoto = claimPhoto;
+    }
+
+    public String getClaimPhoto() {
+        return claimPhoto;
+    }
 }

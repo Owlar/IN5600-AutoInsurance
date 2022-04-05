@@ -72,6 +72,7 @@ public class NewClaimSummaryScreen extends Fragment {
         return view;
     }
 
+    // TODO merge the two getParams() into 1, maybe in a separate function -> to avoid having to change value 2 places
     private StringRequest postInsertNewClaim() {
         return new StringRequest(Request.Method.POST,  URL+ "/postInsertNewClaim", new Response.Listener<String>() {
             @Override
@@ -91,7 +92,7 @@ public class NewClaimSummaryScreen extends Fragment {
                 map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
                 map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
                 map.put("newClaimDes", newClaimSingleton.getClaimDes());
-                map.put("newClaimPho", "na");
+                map.put("newClaimPho", newClaimSingleton.getClaimPhoto());
                 map.put("newClaimLoc", "na");
                 map.put("newClaimSta", "na");
                 return map;
@@ -118,7 +119,7 @@ public class NewClaimSummaryScreen extends Fragment {
                 map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
                 map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
                 map.put("updateClaimDes", newClaimSingleton.getClaimDes());
-                map.put("updateClaimPho", "na");
+                map.put("updateClaimPho", newClaimSingleton.getClaimPhoto());
                 map.put("updateClaimLoc", "na");
                 map.put("updateClaimSta", "na");
                 return map;
