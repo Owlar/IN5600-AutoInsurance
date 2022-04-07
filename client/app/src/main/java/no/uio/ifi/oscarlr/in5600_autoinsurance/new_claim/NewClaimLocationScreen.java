@@ -45,7 +45,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
 
     private GoogleMap mMap = null;
     private Button myLocationButton;
-    private FusedLocationProviderClient fusedLocationProviderClient = null;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private LatLng lastPosition = null;
 
     public NewClaimLocationScreen(ViewPager2 viewPager) {
@@ -94,42 +94,39 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        myLocationButton.setVisibility(View.VISIBLE);
         setMapClickListeners();
         setUISettings();
+
+        myLocationButton.setOnClickListener(v -> requestLocationPermission());
     }
 
+    @SuppressLint("MissingPermission")
     @AfterPermissionGranted(PERMISSION_LOCATION_ID)
-    private void getUserLocation() {
+    private void requestLocationPermission() {
         if (EasyPermissions.hasPermissions(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            myLocationButton.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("MissingPermission")
-                @Override
-                public void onClick(View v) {
-                    // Could use getCurrentLocation(), but getLastLocation() minimizes battery usage
-                    fusedLocationProviderClient.getLastLocation()
-                            .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    if (location != null) {
-                                        lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                                        logLastPosition();
+            // Could use getCurrentLocation(), but getLastLocation() minimizes battery usage
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                                logLastPosition();
 
-                                        if (createMarker() != null) {
-                                            goToMarkedPosition();
-                                        }
-                                    }
+                                if (createNewMarker() != null) {
+                                    goToMarkedPosition();
                                 }
-                            });
-
-                }
-            });
+                            }
+                        }
+                    });
         } else {
             EasyPermissions.requestPermissions(this, "Need location access to show MyLocation", PERMISSION_LOCATION_ID, Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
 
-    private Marker createMarker() {
+    private Marker createNewMarker() {
+        mMap.clear();
+
         MarkerOptions markerOptions = new MarkerOptions();
         // TODO: Potentially change title and snippet to those set in previous pages in ViewPager
         markerOptions.title("My Position");
@@ -181,10 +178,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-
-        // TODO: Fix onResume loop on "Don't allow" permission
-
-        getUserLocation();
     }
 
     // User should be able to change position of claim to that of an existing marker's position by clicking on it
