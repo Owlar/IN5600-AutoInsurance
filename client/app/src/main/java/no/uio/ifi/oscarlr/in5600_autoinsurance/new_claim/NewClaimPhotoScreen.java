@@ -103,8 +103,13 @@ public class NewClaimPhotoScreen extends Fragment {
         view.findViewById(R.id.backButtonPhotoScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(1));
 
         view.findViewById(R.id.nextButtonPhotoScreen).setOnClickListener(view1 -> {
-            // TODO avoid doing multiple times for same picture (if you go back from summary)
-            newClaimSingleton.setClaimPhoto(convertImageToString());
+            if (imageView.getDrawable() != null) {
+                // TODO avoid doing multiple times for same picture (if you go back from summary)
+                newClaimSingleton.setClaimPhoto(convertImageToString());
+            }
+            else {
+//                return; // TODO can add toast and prevent continuing without choosing a photo
+            }
 
             viewPager.setCurrentItem(3);
         });
