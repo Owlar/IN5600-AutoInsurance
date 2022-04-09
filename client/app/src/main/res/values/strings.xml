@@ -18,6 +18,7 @@
     <!-- ProfileFragment -->
     <string name="log_out_profile">Logout</string>
     <string name="change_password_profile">Change password</string>
+    <string name="settings_content_description_profile">Go to settings</string>
 
     <!-- Dialog -->
     <string name="new_claim_dialog">New claim</string>

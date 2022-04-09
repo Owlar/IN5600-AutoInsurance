@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -39,6 +40,14 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        ImageButton settingsButton = view.findViewById(R.id.settings_button_profile_fragment);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSettingsFragment();
+            }
+        });
+
         Button changePasswordButton = view.findViewById(R.id.change_password_profile_fragment);
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +65,13 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void goToSettingsFragment() {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new SettingsFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void goToChangePasswordFragment() {
