@@ -20,18 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/screenTwoSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/new_claim_dotdotdot_subtitle"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/screenTwoTitle" />
-
     <Button
         android:id="@+id/screenLocationMyPositionButton"
         android:layout_width="wrap_content"
@@ -39,17 +27,28 @@
         android:text="@string/new_claim_location_button_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/screenTwoSubtitle"
-        app:layout_constraintBottom_toTopOf="@id/new_claim_map" />
+        app:layout_constraintTop_toBottomOf="@id/screenTwoTitle"
+        app:layout_constraintBottom_toTopOf="@id/mapSearchView" />
 
     <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:id="@+id/new_claim_map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/screenTwoSubtitle"
+        app:layout_constraintTop_toBottomOf="@id/mapSearchView"
         app:layout_constraintBottom_toTopOf="@id/backButtonLocationScreen" />
+
+    <SearchView
+        android:id="@+id/mapSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:iconifiedByDefault="false"
+        app:queryHint="@string/new_claim_location_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/screenLocationMyPositionButton"/>
 
     <TextView
         android:id="@+id/backButtonLocationScreen"
