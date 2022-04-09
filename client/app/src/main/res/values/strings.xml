@@ -34,6 +34,7 @@
     <string name="new_claim_photo_title">2. Photo</string>
     <string name="new_claim_location_title">3. Location</string>
     <string name="new_claim_location_button_text">My Location</string>
+    <string name="new_claim_location_search">Search here</string>
     <string name="new_claim_dotdotdot_subtitle">…</string>
     <string name="new_claim_summary_title">Summary</string>
 

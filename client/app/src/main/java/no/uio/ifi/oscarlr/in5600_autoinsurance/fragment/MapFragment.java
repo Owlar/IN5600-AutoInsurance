@@ -52,6 +52,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         setMapClickListeners();
         setUISettings();
+        // TODO: Clusters
         showClaims();
     }
 

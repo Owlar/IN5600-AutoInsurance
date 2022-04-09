@@ -2,6 +2,8 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +32,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.IOException;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
@@ -45,8 +49,10 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
 
     private GoogleMap mMap = null;
     private Button myLocationButton;
-    private FusedLocationProviderClient fusedLocationProviderClient = null;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private LatLng lastPosition = null;
+
+    private SearchView searchView;
 
     public NewClaimLocationScreen(ViewPager2 viewPager) {
         this.viewPager = viewPager;
@@ -72,7 +78,18 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
             newClaimSingleton.setClaimPosition(lastPosition);
         });
 
-        // Needed because of ViewPager
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        myLocationButton = view.findViewById(R.id.screenLocationMyPositionButton);
+
+        setupMapView(view, savedInstanceState);
+
+        setupSearch(view);
+
+        return view;
+    }
+
+    // Needed because of ViewPager
+    private void setupMapView(View view, Bundle savedInstanceState) {
         MapView mapView = view.findViewById(R.id.new_claim_map);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
@@ -82,54 +99,88 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
             e.printStackTrace();
         }
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-        myLocationButton = view.findViewById(R.id.screenLocationMyPositionButton);
-
         mapView.getMapAsync(this);
+    }
 
-        return view;
+    private void setupSearch(View view) {
+        searchView = view.findViewById(R.id.mapSearchView);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return searchLocation();
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private boolean searchLocation() {
+        String location = searchView.getQuery().toString();
+        List<Address> addresses = null;
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(requireContext());
+            try {
+                addresses = geocoder.getFromLocationName(location, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Address address;
+            if (addresses != null) {
+                address = addresses.get(0);
+                lastPosition = new LatLng(address.getLatitude(), address.getLongitude());
+                if (createNewMarker() != null) {
+                    goToMarkedPosition();
+                }
+            } else {
+                Toast.makeText(requireContext(), "No results for your search, please try again!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return false;
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        myLocationButton.setVisibility(View.VISIBLE);
         setMapClickListeners();
         setUISettings();
+
+        myLocationButton.setOnClickListener(v -> requestLocationPermission());
     }
 
+    @SuppressLint("MissingPermission")
     @AfterPermissionGranted(PERMISSION_LOCATION_ID)
-    private void getUserLocation() {
+    private void requestLocationPermission() {
         if (EasyPermissions.hasPermissions(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            myLocationButton.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("MissingPermission")
-                @Override
-                public void onClick(View v) {
-                    // Could use getCurrentLocation(), but getLastLocation() minimizes battery usage
-                    fusedLocationProviderClient.getLastLocation()
-                            .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    if (location != null) {
-                                        lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                                        logLastPosition();
+            // Could use getCurrentLocation(), but getLastLocation() minimizes battery usage
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                                logLastPosition();
 
-                                        if (createMarker() != null) {
-                                            goToMarkedPosition();
-                                        }
-                                    }
+                                if (createNewMarker() != null) {
+                                    goToMarkedPosition();
                                 }
-                            });
-
-                }
-            });
+                            }
+                        }
+                    });
         } else {
             EasyPermissions.requestPermissions(this, "Need location access to show MyLocation", PERMISSION_LOCATION_ID, Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
 
-    private Marker createMarker() {
+    private Marker createNewMarker() {
+        mMap.clear();
+
         MarkerOptions markerOptions = new MarkerOptions();
         // TODO: Potentially change title and snippet to those set in previous pages in ViewPager
         markerOptions.title("My Position");
@@ -181,10 +232,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-
-        // TODO: Fix onResume loop on "Don't allow" permission
-
-        getUserLocation();
     }
 
     // User should be able to change position of claim to that of an existing marker's position by clicking on it
