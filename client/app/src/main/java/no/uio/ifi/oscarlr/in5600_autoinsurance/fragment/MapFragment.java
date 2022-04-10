@@ -17,8 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Arrays;
-
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
@@ -26,9 +24,6 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
-
-    private static final LatLng POSITION_UIO = new LatLng(59.940103683567294, 10.721749598320056);
-    private static final String MARKER_TITLE = "Marker";
 
     private static final String TAG = "MapFragment";
 
@@ -54,7 +49,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         setMapClickListeners();
         setUISettings();
-        // TODO: Clusters
+
         showClaims();
     }
 
@@ -92,7 +87,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapClick(@NonNull LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         mMap.addMarker(markerOptions);
     }

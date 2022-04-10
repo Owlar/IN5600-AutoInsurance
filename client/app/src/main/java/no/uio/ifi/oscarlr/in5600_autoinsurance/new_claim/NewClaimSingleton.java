@@ -1,7 +1,5 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class NewClaimSingleton {
     private static NewClaimSingleton instance;
     private String claimDes = "";
