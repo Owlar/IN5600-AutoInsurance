@@ -75,7 +75,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
                 return;
             }
             viewPager.setCurrentItem(4);
-            newClaimSingleton.setClaimPosition(lastPosition);
+            newClaimSingleton.setClaimPosition(lastPosition.latitude + "," + lastPosition.longitude);
         });
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());

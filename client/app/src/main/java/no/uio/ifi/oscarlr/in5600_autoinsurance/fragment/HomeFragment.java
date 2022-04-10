@@ -93,10 +93,14 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
                 newClaimSingleton.setNumberOfClaims(numberOfClaims);
                 JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");
+                JSONArray jsonArrayClaimPosition = response.getJSONArray("claimLocation");
+                JSONArray jsonArrayClaimId = response.getJSONArray("claimId");
 
                 for (int i = 0; i < numberOfClaims; i++) {
                     Claim claim = new Claim();
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
+                    claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
+                    claim.setClaimId(jsonArrayClaimId.get(i).toString());
                     claims.add(claim);
                 }
 

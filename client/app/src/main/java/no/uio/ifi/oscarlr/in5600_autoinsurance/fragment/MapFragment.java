@@ -17,6 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Arrays;
+
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
@@ -72,10 +74,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         for (Claim claim : dataProcessor.getClaims()) {
             MarkerOptions markerOptions = new MarkerOptions();
-            // TODO: USE CLAIM ATTRIBUTES FOR TITLE AND POSITION
-            markerOptions.title(MARKER_TITLE);
+            markerOptions.title("Id: " + claim.claimId);
             markerOptions.snippet(claim.claimDes);
-            markerOptions.position(POSITION_UIO);
+
+            String[] latLngStrings = claim.getClaimLocation().split(",");
+            LatLng latLng = new LatLng(Double.parseDouble(latLngStrings[0]), Double.parseDouble(latLngStrings[1]));
+            markerOptions.position(latLng);
 
             Marker marker = mMap.addMarker(markerOptions);
             assert marker != null;

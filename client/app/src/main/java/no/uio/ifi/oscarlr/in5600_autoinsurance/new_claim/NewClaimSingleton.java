@@ -6,7 +6,7 @@ public class NewClaimSingleton {
     private static NewClaimSingleton instance;
     private String claimDes = "";
     private String claimPhoto = "";
-    private LatLng claimPosition;
+    private String claimPosition;
     private String numberOfClaims = "0";
 
     private NewClaimSingleton () {
@@ -28,11 +28,11 @@ public class NewClaimSingleton {
         return claimDes;
     }
 
-    public void setClaimPosition(LatLng latLng) {
-        this.claimPosition = latLng;
+    public void setClaimPosition(String loc) {
+        this.claimPosition = loc;
     }
 
-    public LatLng getClaimPosition() {
+    public String getClaimPosition() {
         return claimPosition;
     }
 

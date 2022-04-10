@@ -93,7 +93,7 @@ public class NewClaimSummaryScreen extends Fragment {
                 map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
                 map.put("newClaimDes", newClaimSingleton.getClaimDes());
                 map.put("newClaimPho", newClaimSingleton.getClaimPhoto());
-                map.put("newClaimLoc", "na");
+                map.put("newClaimLoc", newClaimSingleton.getClaimPosition());
                 map.put("newClaimSta", "na");
                 return map;
             }
@@ -120,7 +120,7 @@ public class NewClaimSummaryScreen extends Fragment {
                 map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
                 map.put("updateClaimDes", newClaimSingleton.getClaimDes());
                 map.put("updateClaimPho", newClaimSingleton.getClaimPhoto());
-                map.put("updateClaimLoc", "na");
+                map.put("updateClaimLoc", newClaimSingleton.getClaimPosition());
                 map.put("updateClaimSta", "na");
                 return map;
             }
