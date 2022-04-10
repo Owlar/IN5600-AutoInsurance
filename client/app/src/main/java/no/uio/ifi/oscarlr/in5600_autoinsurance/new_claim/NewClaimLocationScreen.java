@@ -34,14 +34,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallback, EasyPermissions.PermissionCallbacks, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMarkerClickListener {
 
     private final ViewPager2 viewPager;
+    private final int replaceClaimWithID;
     private final NewClaimSingleton newClaimSingleton;
 
     private final int PERMISSION_LOCATION_ID = 1;
@@ -54,8 +59,10 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
 
     private SearchView searchView;
 
-    public NewClaimLocationScreen(ViewPager2 viewPager) {
+    public NewClaimLocationScreen(ViewPager2 viewPager, int replaceClaimWithID) {
         this.viewPager = viewPager;
+        this.replaceClaimWithID = replaceClaimWithID;
+
         newClaimSingleton = NewClaimSingleton.getInstance();
     }
 
@@ -66,7 +73,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_claim_location_screen, container, false);
 
-        // TODO: Refactor view1 below and ID's in ViewPager2 XML files
         view.findViewById(R.id.backButtonLocationScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(2));
 
         view.findViewById(R.id.nextButtonLocationScreen).setOnClickListener(view1 -> {
@@ -150,6 +156,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
 
         setMapClickListeners();
         setUISettings();
+        setClaimLocationIfUpdatingClaim();
 
         myLocationButton.setOnClickListener(v -> requestLocationPermission());
     }
@@ -182,7 +189,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         mMap.clear();
 
         MarkerOptions markerOptions = new MarkerOptions();
-        // TODO: Potentially change title and snippet to those set in previous pages in ViewPager
         markerOptions.title("My Position");
         markerOptions.snippet("My Description");
         markerOptions.position(lastPosition);
@@ -206,10 +212,20 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         mMap.getUiSettings().setCompassEnabled(true);
     }
 
+    private void setClaimLocationIfUpdatingClaim() {
+        DataProcessor dataProcessor = new DataProcessor(requireContext());
+        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
+        if (replaceClaimWithID != -1) {
+            lastPosition = MapUtil.stringLocationToLatLng(updateClaim.claimLocation);
+            if (createNewMarker() != null) {
+                goToMarkedPosition();
+            }
+        }
+    }
+
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
-        // TODO: Potentially change title and snippet to those set in previous pages in ViewPager
         markerOptions.title("My Position");
         markerOptions.snippet("My Description");
         markerOptions.position(latLng);

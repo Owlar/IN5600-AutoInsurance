@@ -46,9 +46,9 @@ public class NewClaimDialogFragment extends DialogFragment {
 
         ArrayList<Fragment> fragmentList = new ArrayList<>(Arrays.asList(
                 new NewClaimIntroScreen(viewPager),
-                new NewClaimDescriptionScreen(viewPager),
-                new NewClaimPhotoScreen(viewPager),
-                new NewClaimLocationScreen(viewPager),
+                new NewClaimDescriptionScreen(viewPager, replaceClaimWithID),
+                new NewClaimPhotoScreen(viewPager, replaceClaimWithID),
+                new NewClaimLocationScreen(viewPager, replaceClaimWithID),
                 new NewClaimSummaryScreen(viewPager, this, replaceClaimWithID)
         ));
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle(), fragmentList);

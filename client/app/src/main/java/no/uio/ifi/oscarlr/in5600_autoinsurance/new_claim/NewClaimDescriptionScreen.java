@@ -15,15 +15,20 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 
 public class NewClaimDescriptionScreen extends Fragment {
 
     private final ViewPager2 viewPager;
+    private final int replaceClaimWithID;
     private final NewClaimSingleton newClaimSingleton;
 
-    public NewClaimDescriptionScreen(ViewPager2 viewPager) {
+    public NewClaimDescriptionScreen(ViewPager2 viewPager, int replaceClaimWithID) {
         this.viewPager = viewPager;
+        this.replaceClaimWithID = replaceClaimWithID;
+
         newClaimSingleton = NewClaimSingleton.getInstance();
     }
 
@@ -37,6 +42,8 @@ public class NewClaimDescriptionScreen extends Fragment {
         });
 
         TextInputLayout description = view.findViewById(R.id.screenTwoClaimDescription);
+        setClaimDescriptionIfUpdatingClaim(description);
+
         view.findViewById(R.id.nextButtonDescriptionScreen).setOnClickListener(view1 -> {
             if (Objects.requireNonNull(description.getEditText()).getText().toString().isEmpty()) {
                 description.requestFocus();
@@ -50,5 +57,13 @@ public class NewClaimDescriptionScreen extends Fragment {
 
 
         return view;
+    }
+
+    private void setClaimDescriptionIfUpdatingClaim(TextInputLayout description) {
+        DataProcessor dataProcessor = new DataProcessor(requireContext());
+        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
+        if (replaceClaimWithID != -1) {
+            Objects.requireNonNull(description.getEditText()).setText(updateClaim.claimDes);
+        }
     }
 }

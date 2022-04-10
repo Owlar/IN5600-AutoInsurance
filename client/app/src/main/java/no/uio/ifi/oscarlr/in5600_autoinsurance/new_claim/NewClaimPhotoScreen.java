@@ -43,7 +43,7 @@ public class NewClaimPhotoScreen extends Fragment {
     private String currentPhotoPath;
     private final NewClaimSingleton newClaimSingleton;
 
-    public NewClaimPhotoScreen(ViewPager2 viewPager) {
+    public NewClaimPhotoScreen(ViewPager2 viewPager, int replaceClaimWithID) {
         this.viewPager = viewPager;
         newClaimSingleton = NewClaimSingleton.getInstance();
 
