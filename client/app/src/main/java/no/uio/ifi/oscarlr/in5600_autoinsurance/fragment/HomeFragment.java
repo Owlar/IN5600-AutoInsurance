@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
         view.findViewById(R.id.floating_action_button).setOnClickListener(view1 -> {
             if (numberOfClaims >= MAX_NUMBER_OF_CLAIMS) {
-                Toast.makeText(getActivity(), "Max claims reached. Replace or delete a claim", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Max claims reached", Toast.LENGTH_LONG).show();
             }
             else {
                 startNewClaim(view, -1);

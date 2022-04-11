@@ -60,12 +60,8 @@
                 android:text="@string/claim_card_replace_button_text"
                 style="?attr/borderlessButtonStyle" />
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/claim_card_delete_button_text"
-                style="?attr/borderlessButtonStyle" />
-
         </LinearLayout>
+
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
