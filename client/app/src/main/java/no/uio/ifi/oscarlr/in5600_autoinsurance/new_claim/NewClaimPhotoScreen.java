@@ -32,6 +32,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
 
 public class NewClaimPhotoScreen extends Fragment {
 
@@ -42,9 +45,11 @@ public class NewClaimPhotoScreen extends Fragment {
     private ImageView imageView;
     private String currentPhotoPath;
     private final NewClaimSingleton newClaimSingleton;
+    private final int replaceClaimWithID;
 
     public NewClaimPhotoScreen(ViewPager2 viewPager, int replaceClaimWithID) {
         this.viewPager = viewPager;
+        this.replaceClaimWithID = replaceClaimWithID;
         newClaimSingleton = NewClaimSingleton.getInstance();
 
         activityResultLauncherPermissionsCamera = registerForActivityResult(
@@ -115,6 +120,8 @@ public class NewClaimPhotoScreen extends Fragment {
 
         imageView = view.findViewById(R.id.screenPhotoImageView);
 
+        setClaimPhotoIfUpdatingClaim();
+
         view.findViewById(R.id.screenPhotoTakePhotoButton).setOnClickListener(view1 -> {
             activityResultLauncherPermissionsCamera.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
         });
@@ -125,6 +132,18 @@ public class NewClaimPhotoScreen extends Fragment {
         });
 
         return view;
+    }
+
+    private void setClaimPhotoIfUpdatingClaim() {
+        DataProcessor dataProcessor = new DataProcessor(requireContext());
+        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
+        if (replaceClaimWithID != -1) {
+            /*
+            currentPhotoPath = updateClaim.getClaimPhoto();
+            imageView.setImageURI(Uri.fromFile(new File(currentPhotoPath)));
+            */
+            // TODO: Set image
+        }
     }
 
     private File createImageFile() throws IOException {
