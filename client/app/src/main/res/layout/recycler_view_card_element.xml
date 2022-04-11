@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/cardPhoto"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:src="@color/blue"

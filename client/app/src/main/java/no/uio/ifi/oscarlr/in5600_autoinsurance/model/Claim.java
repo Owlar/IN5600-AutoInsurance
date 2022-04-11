@@ -1,11 +1,14 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.model;
 
+import android.graphics.Bitmap;
+
 public class Claim {
     public String id;
     public String numberOfClaims;
     public String claimId;
     public String claimDes;
-    public String claimPhoto;
+    public String claimPhotoBase64;
+    public Bitmap claimPhoto;
     public String claimLocation;
     public String claimStatus;
 
@@ -13,7 +16,7 @@ public class Claim {
 
     }
 
-    public Claim(String id, String numberOfClaims, String claimId, String claimDes, String claimPhoto, String claimLocation, String claimStatus) {
+    public Claim(String id, String numberOfClaims, String claimId, String claimDes, String claimPhotoBase64, Bitmap claimPhoto, String claimLocation, String claimStatus) {
         this.id = id;
         this.numberOfClaims = numberOfClaims;
         this.claimId = claimId;
@@ -55,11 +58,19 @@ public class Claim {
         this.claimDes = claimDes;
     }
 
-    public String getClaimPhoto() {
+    public void setClaimPhotoBase64(String claimPhotoBase64) {
+        this.claimPhotoBase64 = claimPhotoBase64;
+    }
+
+    public String getClaimPhotoBase64() {
+        return claimPhotoBase64;
+    }
+
+    public Bitmap getClaimPhoto() {
         return claimPhoto;
     }
 
-    public void setClaimPhoto(String claimPhoto) {
+    public void setClaimPhoto(Bitmap claimPhoto) {
         this.claimPhoto = claimPhoto;
     }
 

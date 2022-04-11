@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,11 +36,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.description.setText(claims.get(0).claimDes.get(position));
         holder.description.setText(claims.get(position).claimDes);
-//        holder.photo.setText(claims.get(0).claimPhoto.get(position));
-//        holder.location.setText(claims.get(0).claimLocation.get(position));
-//        holder.status.setText(claims.get(0).claimStatus.get(position));
+        holder.imageView.setImageBitmap(claims.get(position).getClaimPhoto());
     }
 
     @Override
@@ -48,15 +46,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView description, photo, location, status;
+        TextView description;
+        ImageView imageView;
 
         public ViewHolder(View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
             description = itemView.findViewById(R.id.cardDescription);
-//            photo = itemView.findViewById(R.id.t2);
-//            location = itemView.findViewById(R.id.t3);
-//            status = itemView.findViewById(R.id.t4);
+            imageView = itemView.findViewById(R.id.cardPhoto);
 
             itemView.findViewById(R.id.cardReplaceButton).setOnClickListener(view -> {
                 if (recyclerViewInterface != null) {

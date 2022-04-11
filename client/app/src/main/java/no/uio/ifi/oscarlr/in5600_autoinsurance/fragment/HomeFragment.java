@@ -7,7 +7,10 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConsta
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,12 +98,15 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");
                 JSONArray jsonArrayClaimPosition = response.getJSONArray("claimLocation");
                 JSONArray jsonArrayClaimId = response.getJSONArray("claimId");
+                JSONArray jsonArrayClaimPhoto = response.getJSONArray("claimPhoto");
 
                 for (int i = 0; i < numberOfClaims; i++) {
                     Claim claim = new Claim();
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
                     claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
                     claim.setClaimId(jsonArrayClaimId.get(i).toString());
+                    claim.setClaimPhotoBase64(jsonArrayClaimPhoto.get(i).toString());
+                    claim.setClaimPhoto(convertBase64StringToBitmap(jsonArrayClaimPhoto.get(i).toString()));
                     claims.add(claim);
                 }
 
@@ -123,6 +129,11 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
 
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(objectRequest);
+    }
+
+    private Bitmap convertBase64StringToBitmap(String base64) {
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     private void saveToLocalStorage(List<Claim> claims) {

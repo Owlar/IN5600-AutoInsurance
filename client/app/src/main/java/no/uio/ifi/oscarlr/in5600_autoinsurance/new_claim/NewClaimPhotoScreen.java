@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,12 @@ public class NewClaimPhotoScreen extends Fragment {
                             galleryAddPic();
                             imageView.setImageURI(Uri.fromFile(new File(currentPhotoPath)));
                         }
+                        else {
+//                            Log.d("test", "camera result ikke ok");
+                            File file = new File(currentPhotoPath);
+                            boolean b = file.delete();
+//                            Log.d("test", "file deleted:" + b);
+                        }
                     }
                 }
         );
@@ -138,11 +145,8 @@ public class NewClaimPhotoScreen extends Fragment {
         DataProcessor dataProcessor = new DataProcessor(requireContext());
         Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
         if (replaceClaimWithID != -1) {
-            /*
-            currentPhotoPath = updateClaim.getClaimPhoto();
-            imageView.setImageURI(Uri.fromFile(new File(currentPhotoPath)));
-            */
-            // TODO: Set image
+            imageView.setImageBitmap(updateClaim.getClaimPhoto());
+            imageView.setTag(updateClaim.getClaimPhotoBase64());
         }
     }
 
@@ -185,10 +189,15 @@ public class NewClaimPhotoScreen extends Fragment {
     }
 
     private String convertImageToString() {
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] bytes = baos.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
+        if (currentPhotoPath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
+        }
+        else {
+            return imageView.getTag().toString();
+        }
     }
 }
