@@ -6,6 +6,7 @@ public class NewClaimSingleton {
     private String claimPhoto = "";
     private String claimPosition;
     private String numberOfClaims = "0";
+    private String claimPhotoFilepath;
 
     private NewClaimSingleton () {
 
@@ -48,5 +49,13 @@ public class NewClaimSingleton {
 
     public String getClaimPhoto() {
         return claimPhoto;
+    }
+
+    public String getClaimPhotoFilepath() {
+        return claimPhotoFilepath;
+    }
+
+    public void setClaimPhotoFilepath(String claimPhotoFilepath) {
+        this.claimPhotoFilepath = claimPhotoFilepath;
     }
 }

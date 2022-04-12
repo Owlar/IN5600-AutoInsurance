@@ -22,9 +22,9 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 
 public class DataProcessor {
 
-    private Context context;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
 
     private final String TAG = "DataProcessor";
 
@@ -35,6 +35,18 @@ public class DataProcessor {
     }
 
     public void setClaims(List<Claim> claims) {
+        List<Claim> previous = getClaims();
+        // claims is data from server, previous is local (contains filepath)
+        if (previous != null) {
+            if (previous.size() > claims.size()) {
+                claims.add(previous.get(previous.size()-1));
+            }
+
+            for (int i = 0; i < claims.size() && i < previous.size(); i++) {
+                claims.get(i).setClaimPhotoFilepath(previous.get(i).getClaimPhotoFilepath());
+            }
+        }
+
         Gson gson = new Gson();
         String jsonString = gson.toJson(claims);
         editor.putString(KEY_CLAIMS, jsonString);
@@ -45,6 +57,9 @@ public class DataProcessor {
         List<Claim> claims = null;
         ObjectMapper objectMapper = new ObjectMapper();
         String json = sharedPreferences.getString(KEY_CLAIMS, null);
+        if (json == null) {
+            return null;
+        }
         try {
             claims = objectMapper.readValue(json, new TypeReference<List<Claim>>(){});
         } catch (JsonProcessingException e) {
@@ -67,4 +82,19 @@ public class DataProcessor {
         return claim;
     }
 
+    public void setClaimById(String id, Claim claim, boolean replace) {
+        List<Claim> claims = getClaims();
+
+        if (replace) {
+            claims.set(Integer.parseInt(id), claim);
+        }
+        else {
+            claims.add(claim);
+        }
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(claims);
+        editor.putString(KEY_CLAIMS, jsonString);
+        editor.commit();
+
+    }
 }

@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private SharedPreferences sharedPreferences;
     private int numberOfClaims = 0;
     private final int MAX_NUMBER_OF_CLAIMS = 5;
+    private List<Claim> claims;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private void createRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        List<Claim> claims = new ArrayList<>();
+        claims = new ArrayList<>();
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), claims, this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -105,17 +107,20 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
                     claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
                     claim.setClaimId(jsonArrayClaimId.get(i).toString());
-                    claim.setClaimPhotoBase64(jsonArrayClaimPhoto.get(i).toString());
-                    claim.setClaimPhoto(convertBase64StringToBitmap(jsonArrayClaimPhoto.get(i).toString()));
+                    claim.setClaimPhotoBitmap(convertBase64StringToBitmap(jsonArrayClaimPhoto.get(i).toString()));
                     claims.add(claim);
                 }
 
-                recyclerViewAdapter.notifyDataSetChanged();
 
                 saveToLocalStorage(claims);
+                recyclerViewAdapter.notifyDataSetChanged();
+                numberOfClaims = claims.size();
+                newClaimSingleton.setNumberOfClaims(numberOfClaims);
 
-                if (numberOfClaims == 0) {
+                if (claims.size() == 0) {
                     view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.VISIBLE);
+                } else {
+                    view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.INVISIBLE);
                 }
             } catch (JSONException e) {
                 Log.d("Home", e.toString());
@@ -125,8 +130,25 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Toast.makeText(getContext(), "Problems getting claims from server", Toast.LENGTH_SHORT).show();
+                DataProcessor dataProcessor = new DataProcessor(getContext());
+                List<Claim> processorClaims = dataProcessor.getClaims();
+                if (processorClaims != null) {
+                    claims.addAll(processorClaims);
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }
+
+                numberOfClaims = claims.size();
+                if (numberOfClaims == 0) {
+                    view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.VISIBLE);
+                }
             }
         });
+
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(objectRequest);
     }

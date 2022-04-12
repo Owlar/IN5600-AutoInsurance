@@ -7,6 +7,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConsta
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 
 public class NewClaimSummaryScreen extends Fragment {
@@ -57,14 +60,15 @@ public class NewClaimSummaryScreen extends Fragment {
 
             if (replaceClaimWithID == -1) {
                 // Don't replace, make new claim
-                stringRequest = postInsertNewClaim();
+                stringRequest = postStringRequest("/postInsertNewClaim");
             }
             else {
                 // Replace claim
-                stringRequest = postUpdateClaim();
+                stringRequest = postStringRequest("/postUpdateClaim");
             }
 
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            saveToLocalStorage(replaceClaimWithID != -1);
 
             dialogFragment.dismiss();
         });
@@ -72,9 +76,8 @@ public class NewClaimSummaryScreen extends Fragment {
         return view;
     }
 
-    // TODO merge the two getParams() into 1, maybe in a separate function -> to avoid having to change value 2 places
-    private StringRequest postInsertNewClaim() {
-        return new StringRequest(Request.Method.POST,  URL+ "/postInsertNewClaim", new Response.Listener<String>() {
+    private StringRequest postStringRequest(String serverEndpoint) {
+        return new StringRequest(Request.Method.POST,  URL+ serverEndpoint, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -88,42 +91,46 @@ public class NewClaimSummaryScreen extends Fragment {
             @NonNull
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
-                map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
-                map.put("newClaimDes", newClaimSingleton.getClaimDes());
-                map.put("newClaimPho", newClaimSingleton.getClaimPhoto());
-                map.put("newClaimLoc", newClaimSingleton.getClaimPosition());
-                map.put("newClaimSta", "na");
-                return map;
+                return fillGetParams(serverEndpoint);
             }
         };
     }
 
-    private StringRequest postUpdateClaim() {
-        return new StringRequest(Request.Method.POST, URL + "/postUpdateClaim", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+    private Map<String, String> fillGetParams(String stringRequestType) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
+        String claimDes = newClaimSingleton.getClaimDes();
+        String claimPho = newClaimSingleton.getClaimPhoto();
+        String claimLoc = newClaimSingleton.getClaimPosition();
+        String claimSta = "na";
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }) {
-            @NonNull
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
-                map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
-                map.put("updateClaimDes", newClaimSingleton.getClaimDes());
-                map.put("updateClaimPho", newClaimSingleton.getClaimPhoto());
-                map.put("updateClaimLoc", newClaimSingleton.getClaimPosition());
-                map.put("updateClaimSta", "na");
-                return map;
-            }
-        };
+        if (stringRequestType.equals("/postInsertNewClaim")) {
+            map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
+            map.put("newClaimDes", claimDes);
+            map.put("newClaimPho", claimPho);
+            map.put("newClaimLoc", claimLoc);
+            map.put("newClaimSta", claimSta);
+        }
+        else if (stringRequestType.equals("/postUpdateClaim")) {
+            map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
+            map.put("updateClaimDes", claimDes);
+            map.put("updateClaimPho", claimPho);
+            map.put("updateClaimLoc", claimLoc);
+            map.put("updateClaimSta", claimSta);
+        }
+        return map;
+    }
+
+    private void saveToLocalStorage(boolean replace) {
+        DataProcessor dataProcessor = new DataProcessor(getContext());
+
+        Claim claim = new Claim();
+        String id = (replaceClaimWithID == -1) ? newClaimSingleton.getNumberOfClaims() : String.valueOf(replaceClaimWithID);
+        claim.setClaimId(id);
+        claim.setClaimDes(newClaimSingleton.getClaimDes());
+        claim.setClaimPhotoFilepath(newClaimSingleton.getClaimPhotoFilepath());
+        claim.setClaimLocation(newClaimSingleton.getClaimPosition());
+
+        dataProcessor.setClaimById(id, claim, replace);
     }
 }

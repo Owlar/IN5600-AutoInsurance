@@ -213,9 +213,9 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     }
 
     private void setClaimLocationIfUpdatingClaim() {
-        DataProcessor dataProcessor = new DataProcessor(requireContext());
-        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
         if (replaceClaimWithID != -1) {
+            DataProcessor dataProcessor = new DataProcessor(requireContext());
+            Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
             lastPosition = MapUtil.stringLocationToLatLng(updateClaim.claimLocation);
             if (createNewMarker() != null) {
                 goToMarkedPosition();

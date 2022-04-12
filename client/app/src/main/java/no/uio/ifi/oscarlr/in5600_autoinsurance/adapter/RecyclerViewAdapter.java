@@ -1,6 +1,8 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
@@ -36,8 +39,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.description.setText(claims.get(position).claimDes);
-        holder.imageView.setImageBitmap(claims.get(position).getClaimPhoto());
+        holder.description.setText(claims.get(position).getClaimDes());
+        Bitmap b = claims.get(position).getClaimPhotoBitmap();
+        if (b == null) {
+            File f = new File(claims.get(position).getClaimPhotoFilepath());
+            b = BitmapFactory.decodeFile(f.getAbsolutePath());
+            holder.imageView.setImageBitmap(b);
+
+        } else {
+            holder.imageView.setImageBitmap(claims.get(position).getClaimPhotoBitmap());
+        }
     }
 
     @Override

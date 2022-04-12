@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,12 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -31,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -100,6 +104,11 @@ public class NewClaimPhotoScreen extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                             imageView.setImageURI(result.getData().getData());
+                            // Get correct filepath back
+                            Uri uri = result.getData().getData();
+                            String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+                            DocumentFile file =  DocumentFile.fromSingleUri(requireContext(), uri);
+                            currentPhotoPath = filePath.concat("/" + Objects.requireNonNull(file).getName());
                         }
                     }
                 });
@@ -117,9 +126,11 @@ public class NewClaimPhotoScreen extends Fragment {
             if (imageView.getDrawable() != null) {
                 // TODO avoid doing multiple times for same picture (if you go back from summary)
                 newClaimSingleton.setClaimPhoto(convertImageToString());
+                newClaimSingleton.setClaimPhotoFilepath(currentPhotoPath);
             }
             else {
-//                return; // TODO can add toast and prevent continuing without choosing a photo
+                Toast.makeText(requireContext(), "Please select a photo", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             viewPager.setCurrentItem(3);
@@ -142,11 +153,13 @@ public class NewClaimPhotoScreen extends Fragment {
     }
 
     private void setClaimPhotoIfUpdatingClaim() {
-        DataProcessor dataProcessor = new DataProcessor(requireContext());
-        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
         if (replaceClaimWithID != -1) {
-            imageView.setImageBitmap(updateClaim.getClaimPhoto());
-            imageView.setTag(updateClaim.getClaimPhotoBase64());
+            DataProcessor dataProcessor = new DataProcessor(requireContext());
+            Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
+            Uri uri = Uri.parse(updateClaim.getClaimPhotoFilepath());
+            currentPhotoPath = updateClaim.getClaimPhotoFilepath();
+            imageView.setImageURI(uri);
+            imageView.setTag(convertImageViewToString());
         }
     }
 
@@ -186,6 +199,14 @@ public class NewClaimPhotoScreen extends Fragment {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         requireActivity().sendBroadcast(mediaScanIntent);
+    }
+
+    private String convertImageViewToString() {
+        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     private String convertImageToString() {

@@ -60,9 +60,9 @@ public class NewClaimDescriptionScreen extends Fragment {
     }
 
     private void setClaimDescriptionIfUpdatingClaim(TextInputLayout description) {
-        DataProcessor dataProcessor = new DataProcessor(requireContext());
-        Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
         if (replaceClaimWithID != -1) {
+            DataProcessor dataProcessor = new DataProcessor(requireContext());
+            Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
             Objects.requireNonNull(description.getEditText()).setText(updateClaim.claimDes);
         }
     }
