@@ -5,7 +5,6 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/account_menu_item_profile">
+        <menu>
+            <item
+                android:id="@+id/menu_change_password"
+                android:title="@string/change_password_drawer_profile"
+                android:icon="@drawable/ic_baseline_lock_24"/>
+
+            <item
+                android:id="@+id/menu_log_out"
+                android:title="@string/logout_drawer_profile"
+                android:icon="@drawable/ic_baseline_logout_24"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/settings_menu_item_profile">
+        <menu>
+            <item
+                android:id="@+id/menu_settings"
+                android:title="@string/settings_drawer_profile"
+                android:icon="@drawable/ic_baseline_settings_24"/>
+        </menu>
+    </item>
+
+</menu>

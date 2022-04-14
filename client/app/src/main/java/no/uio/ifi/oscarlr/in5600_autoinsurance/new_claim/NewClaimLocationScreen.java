@@ -34,7 +34,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
