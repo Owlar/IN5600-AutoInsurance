@@ -63,5 +63,7 @@
     <string name="open_menu_profile">Open menu</string>
     <string name="account_menu_item_profile">Account</string>
     <string name="settings_menu_item_profile">Settings</string>
+    <string name="toggle_app_theme_switch_settings">Toggle App Theme</string>
+    <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
 
 </resources>

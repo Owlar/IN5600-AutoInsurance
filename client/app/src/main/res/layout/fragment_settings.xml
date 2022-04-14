@@ -3,4 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <TableRow android:gravity="center">
+
+            <TextView android:text="@string/toggle_app_theme_switch_settings" android:layout_marginEnd="30dp" />
+            <com.google.android.material.switchmaterial.SwitchMaterial  />
+
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <TextView android:text="@string/toggle_offline_mode_switch_settings" android:layout_marginEnd="30dp" />
+            <com.google.android.material.switchmaterial.SwitchMaterial  />
+
+        </TableRow>
+
+    </TableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
