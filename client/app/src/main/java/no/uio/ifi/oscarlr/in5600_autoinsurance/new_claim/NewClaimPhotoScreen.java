@@ -34,7 +34,6 @@ import java.util.Map;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
 
 public class NewClaimPhotoScreen extends Fragment {
 
