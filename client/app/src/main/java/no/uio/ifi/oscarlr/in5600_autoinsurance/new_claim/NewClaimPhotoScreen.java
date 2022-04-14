@@ -23,7 +23,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -34,11 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.FileUtils;
 
 public class NewClaimPhotoScreen extends Fragment {
 
@@ -105,9 +104,8 @@ public class NewClaimPhotoScreen extends Fragment {
                             imageView.setImageURI(result.getData().getData());
                             // Get correct filepath back
                             Uri uri = result.getData().getData();
-                            String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-                            DocumentFile file =  DocumentFile.fromSingleUri(requireContext(), uri);
-                            currentPhotoPath = filePath.concat("/" + Objects.requireNonNull(file).getName());
+                            FileUtils fileUtils = new FileUtils(getContext());
+                            currentPhotoPath = fileUtils.getPath(uri);
                         }
                     }
                 });
