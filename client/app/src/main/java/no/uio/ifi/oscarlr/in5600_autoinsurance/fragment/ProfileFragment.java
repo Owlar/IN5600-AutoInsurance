@@ -7,13 +7,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.lang.reflect.Method;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
@@ -40,43 +47,39 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ImageButton settingsButton = view.findViewById(R.id.settings_button_profile_fragment);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        ImageButton menuButton = view.findViewById(R.id.menu_button_profile_fragment);
+        menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToSettingsFragment();
-            }
-        });
-
-        Button changePasswordButton = view.findViewById(R.id.change_password_profile_fragment);
-        changePasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChangePasswordFragment();
-            }
-        });
-
-        Button logoutButton = view.findViewById(R.id.logout_profile_fragment);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
+                PopupMenu popupMenu = new PopupMenu(requireContext(), menuButton);
+                popupMenu.getMenuInflater().inflate(R.menu.drawer_navigation_menu_profile, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_change_password:
+                                replaceFragment(new ChangePasswordFragment());
+                                break;
+                            case R.id.menu_log_out:
+                                logout();
+                                break;
+                            case R.id.menu_settings:
+                                replaceFragment(new SettingsFragment());
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
             }
         });
 
         return view;
     }
 
-    public void goToSettingsFragment() {
+    private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_view, new SettingsFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    public void goToChangePasswordFragment() {
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_view, new ChangePasswordFragment());
+        fragmentTransaction.replace(R.id.fragment_container_view, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

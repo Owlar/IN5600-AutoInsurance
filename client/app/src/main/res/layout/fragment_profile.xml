@@ -34,14 +34,14 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/settings_button_profile_fragment"
+        android:id="@+id/menu_button_profile_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_settings_24"
+        android:src="@drawable/ic_baseline_menu_24"
         android:layout_margin="6dp"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/settings_content_description_profile" />
+        android:contentDescription="@string/open_menu_profile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
