@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+
 public class SettingsFragment extends Fragment {
 
     @Override
@@ -19,6 +21,8 @@ public class SettingsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        return view;
     }
 }
