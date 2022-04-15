@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,6 +38,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,8 +62,18 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
+
+        viewModel.email.observe(this, e -> {
+            email.setText(e);
+        });
+
+        viewModel.password.observe(this, p -> {
+            password.setText(p);
+        });
     }
 
     public void login(View view) {
