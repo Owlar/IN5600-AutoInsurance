@@ -2,14 +2,19 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_PATH_TO_SAVED_PHOTOS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,17 +30,23 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
@@ -52,12 +63,15 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private int numberOfClaims = 0;
     private final int MAX_NUMBER_OF_CLAIMS = 5;
     private List<Claim> claims;
+    private String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
+    private AtomicInteger keepNewFilepathFromServerCounter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        keepNewFilepathFromServerCounter = new AtomicInteger();
     }
 
     @Override
@@ -71,6 +85,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
 
         createRecyclerView(view);
+
+        view.findViewById(R.id.floating_action_button).setEnabled(false);
 
         view.findViewById(R.id.floating_action_button).setOnClickListener(view1 -> {
             if (numberOfClaims >= MAX_NUMBER_OF_CLAIMS) {
@@ -94,28 +110,63 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
         @SuppressLint("NotifyDataSetChanged") JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
 //            Log.d("Home", response.toString());
+            view.findViewById(R.id.floating_action_button).setEnabled(true);
             try {
                 numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
-                newClaimSingleton.setNumberOfClaims(numberOfClaims);
                 JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");
                 JSONArray jsonArrayClaimPosition = response.getJSONArray("claimLocation");
                 JSONArray jsonArrayClaimId = response.getJSONArray("claimId");
                 JSONArray jsonArrayClaimPhoto = response.getJSONArray("claimPhoto");
+
+                // If a claim's image is not stored locally, need to download from server
+                boolean waitingOnServerPhotoDownload = false;
+                ArrayList<StringRequest> stringRequests = new ArrayList<>();
 
                 for (int i = 0; i < numberOfClaims; i++) {
                     Claim claim = new Claim();
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
                     claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
                     claim.setClaimId(jsonArrayClaimId.get(i).toString());
-                    claim.setClaimPhotoBitmap(convertBase64StringToBitmap(jsonArrayClaimPhoto.get(i).toString()));
+                    try {
+                        String filepathSavedOnServer = jsonArrayClaimPhoto.get(i).toString();
+                        File file = new File(filepathSavedOnServer);
+                        claim.setClaimPhotoFilename(filepathSavedOnServer);
+                        if (file.exists()) {
+                            claim.setClaimPhotoBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                            claim.setClaimPhotoFilepath(filepathSavedOnServer);
+                        }
+                        else {
+                            if (keepNewFilepathFromServer[i] != null) {
+                                file = new File(keepNewFilepathFromServer[i]);
+                                if (file.exists()) {
+                                    claim.setClaimPhotoBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+                                    claim.setClaimPhotoFilepath(keepNewFilepathFromServer[i]);
+                                    // TODO do a postMethodUpdateClaim() here? So the server filepath is updated with the new local one
+                                }
+                            }
+                            else {
+                                // Download photo from server and save locally in "Pictures" directory
+                                StringRequest stringRequest = getMethodDownloadPhoto(claim.getClaimPhotoFilename(), i, view);
+                                stringRequests.add(stringRequest);
+                                waitingOnServerPhotoDownload = true;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     claims.add(claim);
                 }
-
+                if (waitingOnServerPhotoDownload) {
+                    keepNewFilepathFromServerCounter.set(stringRequests.size());
+                    for (StringRequest stringRequest : stringRequests) {
+                        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+                    }
+                    return;
+                }
 
                 saveToLocalStorage(claims);
                 recyclerViewAdapter.notifyDataSetChanged();
-                numberOfClaims = claims.size();
-                newClaimSingleton.setNumberOfClaims(numberOfClaims);
+                newClaimSingleton.setClaims(claims);
 
                 if (claims.size() == 0) {
                     view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.VISIBLE);
@@ -132,6 +183,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 Toast.makeText(getContext(), "Problems getting claims from server", Toast.LENGTH_SHORT).show();
                 DataProcessor dataProcessor = new DataProcessor(getContext());
                 List<Claim> processorClaims = dataProcessor.getClaims();
+                recyclerViewAdapter.disableReplaceButton();
                 if (processorClaims != null) {
                     claims.addAll(processorClaims);
                     recyclerViewAdapter.notifyDataSetChanged();
@@ -182,5 +234,43 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onReplaceClick(int position) {
         startNewClaim(getView(), position);
+    }
+
+    public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {
+        String serverFileName = SERVER_PATH_TO_SAVED_PHOTOS + filename + SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+        return new StringRequest(Request.Method.GET,  URL+ "/getMethodDownloadPhoto?fileName=" + serverFileName, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("test", "getMethodDownloadPhoto() onResponse()");
+                Bitmap bitmap = convertBase64StringToBitmap(response);
+                File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                try {
+                    File imageFile = File.createTempFile(filename, ".png", storageDir);
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                        Log.d("test", imageFile.getAbsolutePath());
+                        keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
+
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        Uri contentUri = Uri.fromFile(imageFile);
+                        mediaScanIntent.setData(contentUri);
+                        requireActivity().sendBroadcast(mediaScanIntent);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                int photosSavedLeftTodo = keepNewFilepathFromServerCounter.decrementAndGet();
+                if (photosSavedLeftTodo == 0) {
+                    // Last claim to download photo
+                    createRecyclerView(view);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
     }
 }

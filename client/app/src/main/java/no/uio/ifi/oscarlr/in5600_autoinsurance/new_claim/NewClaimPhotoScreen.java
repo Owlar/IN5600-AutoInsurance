@@ -4,14 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +22,6 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,8 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.FileUtils;
 
 public class NewClaimPhotoScreen extends Fragment {
@@ -83,7 +76,9 @@ public class NewClaimPhotoScreen extends Fragment {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                             galleryAddPic();
-                            imageView.setImageURI(Uri.fromFile(new File(currentPhotoPath)));
+                            Uri uri = Uri.fromFile(new File(currentPhotoPath));
+                            imageView.setImageURI(uri);
+                            setPhotoBitmapForSingleton(uri);
                         }
                         else {
 //                            Log.d("test", "camera result ikke ok");
@@ -106,6 +101,8 @@ public class NewClaimPhotoScreen extends Fragment {
                             Uri uri = result.getData().getData();
                             FileUtils fileUtils = new FileUtils(getContext());
                             currentPhotoPath = fileUtils.getPath(uri);
+
+                            setPhotoBitmapForSingleton(uri);
                         }
                     }
                 });
@@ -120,16 +117,14 @@ public class NewClaimPhotoScreen extends Fragment {
         view.findViewById(R.id.backButtonPhotoScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(1));
 
         view.findViewById(R.id.nextButtonPhotoScreen).setOnClickListener(view1 -> {
-            if (imageView.getDrawable() != null) {
-                // TODO avoid doing multiple times for same picture (if you go back from summary)
-                newClaimSingleton.setClaimPhoto(convertImageToString());
-                newClaimSingleton.setClaimPhotoFilepath(currentPhotoPath);
-            }
-            else {
+            if (imageView.getDrawable() == null) {
                 Toast.makeText(requireContext(), "Please select a photo", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if (replaceClaimWithID == -1) {
+                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilepath(currentPhotoPath);
+                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilename(currentPhotoPath);
+            }
             viewPager.setCurrentItem(3);
         });
 
@@ -151,12 +146,13 @@ public class NewClaimPhotoScreen extends Fragment {
 
     private void setClaimPhotoIfUpdatingClaim() {
         if (replaceClaimWithID != -1) {
-            DataProcessor dataProcessor = new DataProcessor(requireContext());
-            Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
-            Uri uri = Uri.parse(updateClaim.getClaimPhotoFilepath());
-            currentPhotoPath = updateClaim.getClaimPhotoFilepath();
-            imageView.setImageURI(uri);
-            imageView.setTag(convertImageViewToString());
+            try {
+                Bitmap bitmap = newClaimSingleton.getClaim(replaceClaimWithID).getClaimPhotoBitmap();
+                imageView.setImageBitmap(bitmap);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -198,24 +194,12 @@ public class NewClaimPhotoScreen extends Fragment {
         requireActivity().sendBroadcast(mediaScanIntent);
     }
 
-    private String convertImageViewToString() {
-        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] bytes = baos.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
-    }
-
-    private String convertImageToString() {
-        if (currentPhotoPath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            return Base64.encodeToString(bytes, Base64.DEFAULT);
-        }
-        else {
-            return imageView.getTag().toString();
+    private void setPhotoBitmapForSingleton(Uri uri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), uri);
+            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

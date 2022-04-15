@@ -26,7 +26,6 @@ public class NewClaimDialogFragment extends DialogFragment {
         this.replaceClaimWithID = replaceClaimWithID;
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,11 @@ public class NewClaimDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_claim_dialog, container, false);
-        NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
+
+        if (replaceClaimWithID == -1) {
+            NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
+            newClaimSingleton.initNewClaim();
+        }
 
         ViewPager2 viewPager = view.findViewById(R.id.ViewPager);
 

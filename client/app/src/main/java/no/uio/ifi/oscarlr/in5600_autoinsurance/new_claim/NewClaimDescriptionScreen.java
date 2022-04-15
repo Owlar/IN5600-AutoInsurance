@@ -52,7 +52,7 @@ public class NewClaimDescriptionScreen extends Fragment {
             }
             viewPager.setCurrentItem(2);
             TextInputEditText editText = view.findViewById(R.id.descriptionEditText);
-            newClaimSingleton.setClaimDes(Objects.requireNonNull(editText.getText()).toString());
+            newClaimSingleton.getClaim(replaceClaimWithID).setClaimDes((Objects.requireNonNull(editText.getText()).toString()));
         });
 
 

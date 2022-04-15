@@ -8,26 +8,17 @@ public class Claim {
     public String numberOfClaims;
     public String claimId;
     public String claimDes;
-    public String claimPhotoBase64;
+    private String claimPhotoBase64;
     public String claimPhotoFilepath;
-    public String claimLocation;
-    public String claimStatus;
+    private String claimPhotoFilename;
     public transient Bitmap claimPhotoBitmap; // transient makes gson ignore this in DataProcessor
+    public String claimLocation;
+    private String claimPosition;
+    public String claimStatus;
+
 
     public Claim() {
 
-    }
-
-    public Claim(String id, String numberOfClaims, String claimId, String claimDes, String claimPhotoBase64, String claimPhotoFilepath, String claimLocation, String claimStatus, Bitmap claimPhotoBitmap) {
-        this.id = id;
-        this.numberOfClaims = numberOfClaims;
-        this.claimId = claimId;
-        this.claimDes = claimDes;
-        this.claimLocation = claimLocation;
-        this.claimStatus = claimStatus;
-        this.claimPhotoBase64 = claimPhotoBase64;
-        this.claimPhotoFilepath = claimPhotoFilepath;
-        this.claimPhotoBitmap = claimPhotoBitmap;
     }
 
     public String getId() {
@@ -86,6 +77,14 @@ public class Claim {
         this.claimLocation = claimLocation;
     }
 
+    public void setClaimPosition(String loc) {
+        this.claimPosition = loc;
+    }
+
+    public String getClaimPosition() {
+        return claimPosition;
+    }
+
     public String getClaimStatus() {
         return claimStatus;
     }
@@ -105,5 +104,15 @@ public class Claim {
     @Override
     public String toString() {
         return claimId + ": " + claimDes;
+    }
+
+    public String getClaimPhotoFilename() {
+        return claimPhotoFilename;
+    }
+
+    public void setClaimPhotoFilename(String claimPhotoFilename) {
+        String[] filepathSplit = claimPhotoFilename.split("/");
+        String lastSection = filepathSplit[filepathSplit.length - 1];
+        this.claimPhotoFilename = lastSection.split("\\.")[0];
     }
 }

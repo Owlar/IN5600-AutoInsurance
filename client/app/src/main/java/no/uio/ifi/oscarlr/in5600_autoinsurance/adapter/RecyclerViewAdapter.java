@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     LayoutInflater inflater;
     List<Claim> claims;
     private final RecyclerViewInterface recyclerViewInterface;
+    private boolean disableReplaceButtons = false;
 
     public RecyclerViewAdapter(Context context, List<Claim> claims, RecyclerViewInterface recyclerViewInterface) {
         this.inflater = LayoutInflater.from(context);
@@ -42,12 +44,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.description.setText(claims.get(position).getClaimDes());
         Bitmap b = claims.get(position).getClaimPhotoBitmap();
         if (b == null) {
-            File f = new File(claims.get(position).getClaimPhotoFilepath());
-            b = BitmapFactory.decodeFile(f.getAbsolutePath());
-            holder.imageView.setImageBitmap(b);
+            try {
+                File f = new File(claims.get(position).getClaimPhotoFilepath());
+                b = BitmapFactory.decodeFile(f.getAbsolutePath());
+                holder.imageView.setImageBitmap(b);
+            } catch (Exception e) {
+//                e.printStackTrace(); // Expected error if no image is stored locally
+            }
+
 
         } else {
             holder.imageView.setImageBitmap(claims.get(position).getClaimPhotoBitmap());
+        }
+
+        if (disableReplaceButtons) {
+            holder.replaceButton.setEnabled(false);
         }
     }
 
@@ -56,15 +67,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return claims.size();
     }
 
+    public void disableReplaceButton() {
+        disableReplaceButtons = true;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView description;
         ImageView imageView;
+        Button replaceButton;
 
         public ViewHolder(View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
             description = itemView.findViewById(R.id.cardDescription);
             imageView = itemView.findViewById(R.id.cardPhoto);
+            replaceButton = itemView.findViewById(R.id.cardReplaceButton);
 
             itemView.findViewById(R.id.cardReplaceButton).setOnClickListener(view -> {
                 if (recyclerViewInterface != null) {

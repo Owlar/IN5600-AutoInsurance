@@ -1,12 +1,13 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
+import java.util.List;
+
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+
 public class NewClaimSingleton {
     private static NewClaimSingleton instance;
-    private String claimDes = "";
-    private String claimPhoto = "";
-    private String claimPosition;
-    private String numberOfClaims = "0";
-    private String claimPhotoFilepath;
+    private Claim newClaim;
+    private List<Claim> claims;
 
     private NewClaimSingleton () {
 
@@ -19,43 +20,28 @@ public class NewClaimSingleton {
         return instance;
     }
 
-    public void setClaimDes(String des) {
-        claimDes = des;
-    }
-
-    public String getClaimDes() {
-        return claimDes;
-    }
-
-    public void setClaimPosition(String loc) {
-        this.claimPosition = loc;
-    }
-
-    public String getClaimPosition() {
-        return claimPosition;
-    }
-
     public String getNumberOfClaims() {
-        return numberOfClaims;
+        return String.valueOf(claims.size());
     }
 
-    public void setNumberOfClaims(int numberOfClaims) {
-        this.numberOfClaims = String.valueOf(numberOfClaims);
+    public Claim getClaim(int replaceClaimWithID) {
+        if (replaceClaimWithID == -1) {
+            return newClaim;
+        }
+        else {
+            return claims.get(replaceClaimWithID);
+        }
     }
 
-    public void setClaimPhoto(String claimPhoto) {
-        this.claimPhoto = claimPhoto;
+    public void initNewClaim() {
+        newClaim = new Claim();
     }
 
-    public String getClaimPhoto() {
-        return claimPhoto;
+    public List<Claim> getClaims() {
+        return claims;
     }
 
-    public String getClaimPhotoFilepath() {
-        return claimPhotoFilepath;
-    }
-
-    public void setClaimPhotoFilepath(String claimPhotoFilepath) {
-        this.claimPhotoFilepath = claimPhotoFilepath;
+    public void setClaims(List<Claim> claims) {
+        this.claims = claims;
     }
 }

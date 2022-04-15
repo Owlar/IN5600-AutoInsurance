@@ -34,18 +34,6 @@ public class DataProcessor {
     }
 
     public void setClaims(List<Claim> claims) {
-        List<Claim> previous = getClaims();
-        // claims is data from server, previous is local (contains filepath)
-        if (previous != null) {
-            if (previous.size() > claims.size()) {
-                claims.add(previous.get(previous.size()-1));
-            }
-
-            for (int i = 0; i < claims.size() && i < previous.size(); i++) {
-                claims.get(i).setClaimPhotoFilepath(previous.get(i).getClaimPhotoFilepath());
-            }
-        }
-
         Gson gson = new Gson();
         String jsonString = gson.toJson(claims);
         editor.putString(KEY_CLAIMS, jsonString);

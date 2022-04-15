@@ -2,11 +2,15 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_PATH_TO_SAVED_PHOTOS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +73,7 @@ public class NewClaimSummaryScreen extends Fragment {
             }
 
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+            VolleySingleton.getInstance(getActivity()).addToRequestQueue(postStringRequest("/postMethodUploadPhoto"));
             saveToLocalStorage(replaceClaimWithID != -1);
 
             dialogFragment.dismiss();
@@ -99,24 +105,34 @@ public class NewClaimSummaryScreen extends Fragment {
     private Map<String, String> fillGetParams(String stringRequestType) {
         Map<String, String> map = new HashMap<>();
         map.put("userId", String.valueOf(sharedPreferences.getInt(KEY_ID, 0)));
-        String claimDes = newClaimSingleton.getClaimDes();
-        String claimPho = newClaimSingleton.getClaimPhoto();
-        String claimLoc = newClaimSingleton.getClaimPosition();
+        Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
+        String claimDes = claim.getClaimDes();
+        String claimPho = claim.getClaimPhotoFilepath(); //TODO change to include filename saved on server (postMethodUploadPhoto)
+        String claimLoc = claim.getClaimPosition();
         String claimSta = "na";
 
-        if (stringRequestType.equals("/postInsertNewClaim")) {
-            map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
-            map.put("newClaimDes", claimDes);
-            map.put("newClaimPho", claimPho);
-            map.put("newClaimLoc", claimLoc);
-            map.put("newClaimSta", claimSta);
-        }
-        else if (stringRequestType.equals("/postUpdateClaim")) {
-            map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
-            map.put("updateClaimDes", claimDes);
-            map.put("updateClaimPho", claimPho);
-            map.put("updateClaimLoc", claimLoc);
-            map.put("updateClaimSta", claimSta);
+        switch (stringRequestType) {
+            case "/postInsertNewClaim":
+                map.put("indexUpdateClaim", newClaimSingleton.getNumberOfClaims());
+                map.put("newClaimDes", claimDes);
+                map.put("newClaimPho", claimPho);
+                map.put("newClaimLoc", claimLoc);
+                map.put("newClaimSta", claimSta);
+                break;
+            case "/postUpdateClaim":
+                map.put("indexUpdateClaim", String.valueOf(replaceClaimWithID));
+                map.put("updateClaimDes", claimDes);
+                map.put("updateClaimPho", claimPho);
+                map.put("updateClaimLoc", claimLoc);
+                map.put("updateClaimSta", claimSta);
+                break;
+            case "/postMethodUploadPhoto":
+                map.put("claimId", (replaceClaimWithID == -1) ? newClaimSingleton.getNumberOfClaims() : String.valueOf(replaceClaimWithID));
+                map.put("fileName", SERVER_PATH_TO_SAVED_PHOTOS + claim.getClaimPhotoFilename() + SERVER_FILETYPE_FOR_SAVED_PHOTOS);
+//                Log.d("test", claim.getClaimPhotoFilepath());
+//                Log.d("test", claim.getClaimPhotoFilename());
+                map.put("imageStringBase64", convertImageToString());
+                break;
         }
         return map;
     }
@@ -124,13 +140,18 @@ public class NewClaimSummaryScreen extends Fragment {
     private void saveToLocalStorage(boolean replace) {
         DataProcessor dataProcessor = new DataProcessor(getContext());
 
-        Claim claim = new Claim();
+        Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
         String id = (replaceClaimWithID == -1) ? newClaimSingleton.getNumberOfClaims() : String.valueOf(replaceClaimWithID);
         claim.setClaimId(id);
-        claim.setClaimDes(newClaimSingleton.getClaimDes());
-        claim.setClaimPhotoFilepath(newClaimSingleton.getClaimPhotoFilepath());
-        claim.setClaimLocation(newClaimSingleton.getClaimPosition());
 
         dataProcessor.setClaimById(id, claim, replace);
+    }
+
+    private String convertImageToString() {
+            Bitmap bitmap = newClaimSingleton.getClaim(replaceClaimWithID).getClaimPhotoBitmap();;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 }
