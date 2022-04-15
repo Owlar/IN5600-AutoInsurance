@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         if (sharedPreferences.getString(KEY_FIRST_NAME, null) != null) {
             Log.i(TAG, "User is already logged in.");
             Intent intent = new Intent(this, MainActivity.class);
+            finishAffinity();
             startActivity(intent);
         }
 
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.apply();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
