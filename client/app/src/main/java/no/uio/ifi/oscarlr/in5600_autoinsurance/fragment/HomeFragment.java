@@ -30,7 +30,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -63,7 +62,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private int numberOfClaims = 0;
     private final int MAX_NUMBER_OF_CLAIMS = 5;
     private List<Claim> claims;
-    private String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
+    private final String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
     private AtomicInteger keepNewFilepathFromServerCounter;
 
     @Override

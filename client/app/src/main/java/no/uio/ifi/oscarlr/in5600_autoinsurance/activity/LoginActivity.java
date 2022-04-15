@@ -7,21 +7,26 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -45,26 +50,51 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
 
     private SharedPreferences sharedPreferences;
+    private ActivityResultLauncher<String[]> activityResultLauncherPermissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        // If user is already logged in, go directly to MainActivity
-        if (sharedPreferences.getString(KEY_FIRST_NAME, null) != null) {
-            Log.i(TAG, "User is already logged in.");
-            Intent intent = new Intent(this, MainActivity.class);
-            finishAffinity();
-            startActivity(intent);
-        }
+
+        activityResultLauncherPermissions = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                new ActivityResultCallback<Map<String, Boolean>>() {
+                    @Override
+                    public void onActivityResult(Map<String, Boolean> permissions) {
+                        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
+//                        Log.d("test", entry.getKey() + ", " + entry.getValue());
+                            if (!entry.getValue()) {
+                                return;
+                            }
+                        }
+                        // Proceed, if permissions are granted
+
+                        sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                        // If user is already logged in, go directly to MainActivity
+                        if (sharedPreferences.getString(KEY_FIRST_NAME, null) != null) {
+                            Log.i(TAG, "User is already logged in.");
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finishAffinity();
+                        }
+                        else {
+                            login(null);
+                        }
+                    }
+                });
+        activityResultLauncherPermissions.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
 
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
     }
 
     public void login(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            activityResultLauncherPermissions.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
+            return;
+        }
         if (email.getText().toString().isEmpty()) {
             email.requestFocus();
             Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_SHORT).show();
@@ -76,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        RequestQueue requestQueue = VolleySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostRemoteLogin", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

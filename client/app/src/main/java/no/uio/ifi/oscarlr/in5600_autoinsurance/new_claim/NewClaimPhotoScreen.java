@@ -1,6 +1,5 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.FileUtils;
@@ -37,7 +35,6 @@ public class NewClaimPhotoScreen extends Fragment {
     private final ViewPager2 viewPager;
     private final ActivityResultLauncher<Intent> activityResultLauncherPhotoGallery;
     private final ActivityResultLauncher<Intent> activityResultLauncherCamera;
-    private final ActivityResultLauncher<String[]> activityResultLauncherPermissionsCamera;
     private ImageView imageView;
     private String currentPhotoPath;
     private final NewClaimSingleton newClaimSingleton;
@@ -47,27 +44,6 @@ public class NewClaimPhotoScreen extends Fragment {
         this.viewPager = viewPager;
         this.replaceClaimWithID = replaceClaimWithID;
         newClaimSingleton = NewClaimSingleton.getInstance();
-
-        activityResultLauncherPermissionsCamera = registerForActivityResult(
-                new ActivityResultContracts.RequestMultiplePermissions(),
-                new ActivityResultCallback<Map<String, Boolean>>() {
-                    @Override
-                    public void onActivityResult(Map<String, Boolean> permissions) {
-                        for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
-//                        Log.d("test", entry.getKey() + ", " + entry.getValue());
-                            if (!entry.getValue()) {
-                                return;
-                            }
-                        }
-                        // Proceed, if permissions are granted
-                        try {
-                            createImageFile();
-                            dispatchTakePictureIntent();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
 
         activityResultLauncherCamera = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -133,7 +109,12 @@ public class NewClaimPhotoScreen extends Fragment {
         setClaimPhotoIfUpdatingClaim();
 
         view.findViewById(R.id.screenPhotoTakePhotoButton).setOnClickListener(view1 -> {
-            activityResultLauncherPermissionsCamera.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
+            try {
+                createImageFile();
+                dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         view.findViewById(R.id.screenPhotoPickImageButton).setOnClickListener(view1 -> {
