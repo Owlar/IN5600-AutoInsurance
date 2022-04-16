@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragment.SettingsFragment">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:stretchColumns="0,1"
+        android:layout_margin="10dp">
 
-        <TableRow android:gravity="center">
+        <TableRow>
 
-            <TextView android:text="@string/toggle_app_theme_switch_settings" android:layout_marginEnd="30dp" />
-            <com.google.android.material.switchmaterial.SwitchMaterial  />
+            <TextView android:text="@string/toggle_app_theme_switch_settings" />
+            <com.google.android.material.switchmaterial.SwitchMaterial android:id="@+id/switch_app_theme" />
 
         </TableRow>
 
-        <TableRow android:gravity="center">
+        <TableRow>
 
-            <TextView android:text="@string/toggle_offline_mode_switch_settings" android:layout_marginEnd="30dp" />
-            <com.google.android.material.switchmaterial.SwitchMaterial  />
+            <TextView android:text="@string/toggle_offline_mode_switch_settings" />
+            <com.google.android.material.switchmaterial.SwitchMaterial android:id="@+id/switch_offline_mode" />
 
         </TableRow>
 

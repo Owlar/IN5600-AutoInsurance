@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,6 +42,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -86,8 +88,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
         activityResultLauncherPermissions.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
 
+        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
+
+        viewModel.email.observe(this, e -> {
+            email.setText(e);
+        });
+
+        viewModel.password.observe(this, p -> {
+            password.setText(p);
+        });
     }
 
     public void login(View view) {
