@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IN5600-AutoInsurance.iml" filepath="$PROJECT_DIR$/.idea/modules/IN5600-AutoInsurance.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/IN5600-AutoInsurance.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/IN5600-AutoInsurance.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IN5600AutoInsurance.iml" filepath="$PROJECT_DIR$/.idea/modules/IN5600AutoInsurance.iml" />
     </modules>
   </component>
 </project>

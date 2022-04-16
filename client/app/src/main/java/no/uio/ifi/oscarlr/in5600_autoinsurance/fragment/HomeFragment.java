@@ -107,8 +107,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         int userID = sharedPreferences.getInt(KEY_ID, 0);
         NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
 
-        @SuppressLint("NotifyDataSetChanged") JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
-//            Log.d("Home", response.toString());
+        @SuppressLint("NotifyDataSetChanged")
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
             view.findViewById(R.id.floating_action_button).setEnabled(true);
             try {
                 numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
@@ -242,27 +242,29 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onResponse(String response) {
                 Log.d("test", "getMethodDownloadPhoto() onResponse()");
                 Bitmap bitmap = convertBase64StringToBitmap(response);
-                File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                try {
-                    File imageFile = File.createTempFile(filename, ".png", storageDir);
-                    try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                        Log.d("test", imageFile.getAbsolutePath());
-                        keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
+                if (bitmap != null) {
+                    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    try {
+                        File imageFile = File.createTempFile(filename, ".png", storageDir);
+                        try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                            Log.d("test", imageFile.getAbsolutePath());
+                            keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
 
-                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        Uri contentUri = Uri.fromFile(imageFile);
-                        mediaScanIntent.setData(contentUri);
-                        requireActivity().sendBroadcast(mediaScanIntent);
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            Uri contentUri = Uri.fromFile(imageFile);
+                            mediaScanIntent.setData(contentUri);
+                            requireActivity().sendBroadcast(mediaScanIntent);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                int photosSavedLeftTodo = keepNewFilepathFromServerCounter.decrementAndGet();
-                if (photosSavedLeftTodo == 0) {
-                    // Last claim to download photo
-                    createRecyclerView(view);
+                    int photosSavedLeftTodo = keepNewFilepathFromServerCounter.decrementAndGet();
+                    if (photosSavedLeftTodo == 0) {
+                        // Last claim to download photo
+                        createRecyclerView(view);
+                    }
                 }
             }
         }, new Response.ErrorListener() {

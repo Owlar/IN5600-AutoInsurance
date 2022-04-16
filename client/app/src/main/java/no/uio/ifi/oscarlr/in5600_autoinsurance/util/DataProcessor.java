@@ -5,6 +5,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -71,7 +73,9 @@ public class DataProcessor {
 
     public void setClaimById(String id, Claim claim, boolean replace) {
         List<Claim> claims = getClaims();
-
+        if (claims == null) {
+            claims = new ArrayList<>();
+        }
         if (replace) {
             claims.set(Integer.parseInt(id), claim);
         }

@@ -1,5 +1,8 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -7,7 +10,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 public class NewClaimSingleton {
     private static NewClaimSingleton instance;
     private Claim newClaim;
-    private List<Claim> claims;
+    private List<Claim> claims = new ArrayList<>();
 
     private NewClaimSingleton () {
 

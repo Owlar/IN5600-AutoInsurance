@@ -62,7 +62,7 @@ public class NewClaimSummaryScreen extends Fragment {
 
         view.findViewById(R.id.finishButtonSummaryScreen).setOnClickListener(view1 -> {
             StringRequest stringRequest;
-
+            // TODO: Fix so it writes to server and only save locally if it was written to server
             if (replaceClaimWithID == -1) {
                 // Don't replace, make new claim
                 stringRequest = postStringRequest("/postInsertNewClaim");

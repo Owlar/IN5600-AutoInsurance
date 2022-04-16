@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -67,12 +70,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void showClaims() {
         DataProcessor dataProcessor = new DataProcessor(requireActivity());
-
-        for (Claim claim : dataProcessor.getClaims()) {
+        List<Claim> claimList = dataProcessor.getClaims();
+        if (claimList == null) {
+            Toast.makeText(requireActivity(), "You have no claims to show on map", Toast.LENGTH_LONG).show();
+            return;
+        }
+        for (Claim claim : claimList) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.title("Id: " + claim.claimId);
             markerOptions.snippet(claim.claimDes);
-            markerOptions.position(MapUtil.stringLocationToLatLng(claim.getClaimLocation()));
+            markerOptions.position(MapUtil.stringLocationToLatLng(claim.getClaimPosition()));
 
             Marker marker = mMap.addMarker(markerOptions);
             assert marker != null;

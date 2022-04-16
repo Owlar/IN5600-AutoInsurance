@@ -2,3 +2,4 @@
 server/
 .gradle/
 .project
+local.properties
