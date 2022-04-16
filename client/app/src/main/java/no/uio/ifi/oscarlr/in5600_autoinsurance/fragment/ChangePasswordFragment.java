@@ -7,6 +7,8 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConsta
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,6 +37,7 @@ import java.util.Map;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel;
 
 public class ChangePasswordFragment extends Fragment {
 
@@ -64,9 +68,6 @@ public class ChangePasswordFragment extends Fragment {
             textView.setText(email);
         }
 
-        editText_newPassword = view.findViewById(R.id.editText_new_password);
-        editText_confirmNewPassword = view.findViewById(R.id.editText_confirm_new_password);
-
         Button button = view.findViewById(R.id.change_password);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,8 +75,44 @@ public class ChangePasswordFragment extends Fragment {
                 changePassword();
             }
         });
-        return view;
 
+        editText_newPassword = view.findViewById(R.id.editText_new_password);
+        editText_confirmNewPassword = view.findViewById(R.id.editText_confirm_new_password);
+
+        ChangePasswordViewModel viewModel = new ViewModelProvider(requireActivity()).get(ChangePasswordViewModel.class);
+
+        // Below in onCreateView is two-way data binding
+        viewModel.getNewPassword().observe(getViewLifecycleOwner(), newPassword -> {
+            if (!editText_newPassword.getText().toString().equals(newPassword))
+                editText_newPassword.setText(newPassword);
+        });
+        viewModel.getConfirmNewPassword().observe(getViewLifecycleOwner(), confirmNewPassword -> {
+            if (!editText_confirmNewPassword.getText().toString().equals(confirmNewPassword))
+                editText_confirmNewPassword.setText(confirmNewPassword);
+        });
+
+        editText_newPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.setNewPassword(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        editText_confirmNewPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.setConfirmNewPassword(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        return view;
     }
 
     public void changePassword() {
@@ -102,6 +139,9 @@ public class ChangePasswordFragment extends Fragment {
                 try {
                     Log.i(TAG, response);
                     if (response.equals("OK")) {
+                        editText_newPassword.getText().clear();
+                        editText_confirmNewPassword.getText().clear();
+
                         goToProfileFragment();
                     }
                 } catch (Exception e) {

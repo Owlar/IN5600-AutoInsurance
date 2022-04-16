@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -93,12 +95,38 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
 
-        viewModel.email.observe(this, e -> {
-            email.setText(e);
+        // Below in onCreate is two-way data binding
+        viewModel.getEmail().observe(this, e -> {
+            // Check that changes were made
+            if (!email.getText().toString().equals(e))
+                email.setText(e);
         });
 
-        viewModel.password.observe(this, p -> {
-            password.setText(p);
+        viewModel.getPassword().observe(this, p -> {
+            // Check that changes were made
+            if (!password.getText().toString().equals(p))
+                password.setText(p);
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.setEmail(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.setPassword(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
     }
 
