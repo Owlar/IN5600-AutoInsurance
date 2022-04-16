@@ -79,7 +79,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.title("Id: " + claim.claimId);
             markerOptions.snippet(claim.claimDes);
-            markerOptions.position(MapUtil.stringLocationToLatLng(claim.getClaimPosition()));
+            // TODO: Had to use getClaimPosition() when there were no claims on server, but location now
+            markerOptions.position(MapUtil.stringLocationToLatLng(claim.getClaimLocation()));
 
             Marker marker = mMap.addMarker(markerOptions);
             assert marker != null;
