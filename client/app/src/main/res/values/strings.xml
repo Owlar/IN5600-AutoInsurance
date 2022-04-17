@@ -57,13 +57,17 @@
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_map">Map</string>
     <string name="bottom_navigation_profile">Profile</string>
+
+    <!-- Profile -->
     <string name="settings_drawer_profile">Settings</string>
     <string name="change_password_drawer_profile">Change Password</string>
     <string name="logout_drawer_profile">Logout</string>
     <string name="open_menu_profile">Open menu</string>
     <string name="account_menu_item_profile">Account</string>
     <string name="settings_menu_item_profile">Settings</string>
-    <string name="toggle_app_theme_switch_settings">Toggle App Theme</string>
+
+    <!-- Settings -->
+    <string name="toggle_app_theme_switch_settings">Toggle Dark Mode</string>
     <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
 
 </resources>

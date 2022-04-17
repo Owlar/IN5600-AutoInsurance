@@ -1,6 +1,7 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.util;
 
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_CLAIMS;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_DISPLAY_MODE;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
 import android.content.Context;
@@ -87,5 +88,19 @@ public class DataProcessor {
         editor.putString(KEY_CLAIMS, jsonString);
         editor.commit();
 
+    }
+
+    public void setDisplayMode(String string) {
+        editor.putString(KEY_DISPLAY_MODE, string);
+        editor.commit();
+    }
+
+    public String getDisplayMode() {
+        String displayMode = sharedPreferences.getString(KEY_DISPLAY_MODE, null);
+        if (displayMode == null) {
+            Log.i("TAG", "No display mode is set, will use default");
+            return "day";
+        }
+        return displayMode;
     }
 }

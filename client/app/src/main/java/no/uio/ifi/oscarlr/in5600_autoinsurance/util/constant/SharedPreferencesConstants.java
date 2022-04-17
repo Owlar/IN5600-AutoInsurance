@@ -9,4 +9,6 @@ public class SharedPreferencesConstants {
     public static final String KEY_EMAIL = "KeyEmail";
 
     public static final String KEY_CLAIMS = "KeyClaims";
+
+    public static final String KEY_DISPLAY_MODE = "KeyDisplayMode";
 }
