@@ -62,18 +62,17 @@ public class NewClaimSummaryScreen extends Fragment {
 
         view.findViewById(R.id.finishButtonSummaryScreen).setOnClickListener(view1 -> {
             StringRequest stringRequest;
-            // TODO: Fix so it writes to server and only save locally if it was written to server
+
             if (replaceClaimWithID == -1) {
-                // Don't replace, make new claim
                 stringRequest = postStringRequest("/postInsertNewClaim");
             }
             else {
-                // Replace claim
                 stringRequest = postStringRequest("/postUpdateClaim");
             }
 
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(postStringRequest("/postMethodUploadPhoto"));
+
             saveToLocalStorage(replaceClaimWithID != -1);
 
             dialogFragment.dismiss();
@@ -83,10 +82,9 @@ public class NewClaimSummaryScreen extends Fragment {
     }
 
     private StringRequest postStringRequest(String serverEndpoint) {
-        return new StringRequest(Request.Method.POST,  URL+ serverEndpoint, new Response.Listener<String>() {
+        return new StringRequest(Request.Method.POST,  URL + serverEndpoint, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -108,7 +106,7 @@ public class NewClaimSummaryScreen extends Fragment {
         Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
         String claimDes = claim.getClaimDes();
         String claimPho = claim.getClaimPhotoFilepath(); //TODO change to include filename saved on server (postMethodUploadPhoto)
-        String claimLoc = claim.getClaimPosition();
+        String claimLoc = claim.getClaimLocation();
         String claimSta = "na";
 
         switch (stringRequestType) {
@@ -148,10 +146,10 @@ public class NewClaimSummaryScreen extends Fragment {
     }
 
     private String convertImageToString() {
-            Bitmap bitmap = newClaimSingleton.getClaim(replaceClaimWithID).getClaimPhotoBitmap();;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            return Base64.encodeToString(bytes, Base64.DEFAULT);
+        Bitmap bitmap = newClaimSingleton.getClaim(replaceClaimWithID).getClaimPhotoBitmap();;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 }

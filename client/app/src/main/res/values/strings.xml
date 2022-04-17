@@ -69,5 +69,6 @@
     <!-- Settings -->
     <string name="toggle_app_theme_switch_settings">Toggle Dark Mode</string>
     <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
+    <string name="app_package">no.uio.ifi.oscarlr.in5600_autoinsurance</string>
 
 </resources>

@@ -1,7 +1,5 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 

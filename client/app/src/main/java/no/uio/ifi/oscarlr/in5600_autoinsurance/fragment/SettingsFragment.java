@@ -1,6 +1,5 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
-import android.app.UiModeManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

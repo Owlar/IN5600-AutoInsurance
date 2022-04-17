@@ -3,38 +3,19 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.model;
 import android.graphics.Bitmap;
 
 public class Claim {
-    //TODO public or private?
-    public String id;
-    public String numberOfClaims;
-    public String claimId;
-    public String claimDes;
+
+    private String claimId;
+    private String claimDes;
     private String claimPhotoBase64;
-    public String claimPhotoFilepath;
+    private String claimPhotoFilepath;
     private String claimPhotoFilename;
-    public transient Bitmap claimPhotoBitmap; // transient makes gson ignore this in DataProcessor
-    public String claimLocation;
-    private String claimPosition;
-    public String claimStatus;
+    private transient Bitmap claimPhotoBitmap; // transient makes gson ignore this in DataProcessor
+    private String claimLocation;
+    private String claimStatus;
 
 
     public Claim() {
 
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNumberOfClaims() {
-        return numberOfClaims;
-    }
-
-    public void setNumberOfClaims(String numberOfClaims) {
-        this.numberOfClaims = numberOfClaims;
     }
 
     public String getClaimId() {
@@ -77,14 +58,6 @@ public class Claim {
         this.claimLocation = claimLocation;
     }
 
-    public void setClaimPosition(String loc) {
-        this.claimPosition = loc;
-    }
-
-    public String getClaimPosition() {
-        return claimPosition;
-    }
-
     public String getClaimStatus() {
         return claimStatus;
     }
@@ -101,11 +74,6 @@ public class Claim {
         this.claimPhotoBitmap = claimPhotoBitmap;
     }
 
-    @Override
-    public String toString() {
-        return claimId + ": " + claimDes;
-    }
-
     public String getClaimPhotoFilename() {
         return claimPhotoFilename;
     }
@@ -115,4 +83,10 @@ public class Claim {
         String lastSection = filepathSplit[filepathSplit.length - 1];
         this.claimPhotoFilename = lastSection.split("\\.")[0];
     }
+
+    @Override
+    public String toString() {
+        return claimId + ": " + claimDes;
+    }
+
 }

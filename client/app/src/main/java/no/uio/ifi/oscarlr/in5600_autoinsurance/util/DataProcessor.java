@@ -98,7 +98,7 @@ public class DataProcessor {
     public String getDisplayMode() {
         String displayMode = sharedPreferences.getString(KEY_DISPLAY_MODE, null);
         if (displayMode == null) {
-            Log.i("TAG", "No display mode is set, will use default");
+            Log.i(TAG, "No display mode is set, will use default");
             return "day";
         }
         return displayMode;

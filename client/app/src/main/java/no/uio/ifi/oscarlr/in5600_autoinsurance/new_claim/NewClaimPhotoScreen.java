@@ -158,8 +158,7 @@ public class NewClaimPhotoScreen extends Fragment {
             }
 
             if (photoFile != null) {
-                // TODO maybe change hardcoded app package name
-                Uri photoURI = FileProvider.getUriForFile(requireContext(), "no.uio.ifi.oscarlr.in5600_autoinsurance", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(requireContext(), getString(R.string.app_package), photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activityResultLauncherCamera.launch(takePictureIntent);
             }

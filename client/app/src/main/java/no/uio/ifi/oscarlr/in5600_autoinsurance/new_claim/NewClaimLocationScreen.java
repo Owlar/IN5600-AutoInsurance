@@ -80,7 +80,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
                 return;
             }
             viewPager.setCurrentItem(4);
-            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPosition(lastPosition.latitude + "," + lastPosition.longitude);
+            newClaimSingleton.getClaim(replaceClaimWithID).setClaimLocation(lastPosition.latitude + "," + lastPosition.longitude);
         });
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
@@ -215,7 +215,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         if (replaceClaimWithID != -1) {
             DataProcessor dataProcessor = new DataProcessor(requireContext());
             Claim updateClaim = dataProcessor.getClaimById(replaceClaimWithID);
-            lastPosition = MapUtil.stringLocationToLatLng(updateClaim.claimLocation);
+            lastPosition = MapUtil.stringLocationToLatLng(updateClaim.getClaimLocation());
             if (createNewMarker() != null) {
                 goToMarkedPosition();
             }

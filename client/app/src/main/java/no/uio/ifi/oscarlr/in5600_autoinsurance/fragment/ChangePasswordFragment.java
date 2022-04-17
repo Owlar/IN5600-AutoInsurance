@@ -43,6 +43,7 @@ public class ChangePasswordFragment extends Fragment {
 
     private static final String TAG = "ChangePasswordFragment";
 
+    // TODO: Get email through DataProcessor
     private SharedPreferences sharedPreferences;
 
     private EditText editText_newPassword;
