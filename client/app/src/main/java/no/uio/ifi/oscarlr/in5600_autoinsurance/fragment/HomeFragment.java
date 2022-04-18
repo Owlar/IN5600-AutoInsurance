@@ -27,6 +27,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +57,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimDialogFragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
 
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
@@ -64,6 +67,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private List<Claim> claims;
     private final String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
     private AtomicInteger keepNewFilepathFromServerCounter;
+    private ClaimDetailsViewModel claimDetailsViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        claimDetailsViewModel = new ViewModelProvider(requireActivity()).get(ClaimDetailsViewModel.class);
 
         createRecyclerView(view);
 
@@ -126,6 +132,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
                     claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
                     claim.setClaimId(jsonArrayClaimId.get(i).toString());
+                    // TODO: Set status
+                    claim.setClaimStatus("Active");
                     try {
                         String filepathSavedOnServer = jsonArrayClaimPhoto.get(i).toString();
                         File file = new File(filepathSavedOnServer);
@@ -233,6 +241,19 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onReplaceClick(int position) {
         startNewClaim(getView(), position);
+    }
+
+    private void seeClaimDetails() {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new ClaimDetailsFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSeeDetailsClick(int position) {
+        claimDetailsViewModel.setObject(position);
+        seeClaimDetails();
     }
 
     public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {
