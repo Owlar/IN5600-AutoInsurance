@@ -191,7 +191,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         markerOptions.title("My Position");
         markerOptions.snippet("My Description");
         markerOptions.position(lastPosition);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
         return mMap.addMarker(markerOptions);
     }

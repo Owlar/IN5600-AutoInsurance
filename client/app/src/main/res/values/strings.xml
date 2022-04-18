@@ -2,6 +2,7 @@
     <!-- Project -->
     <string name="app_name">IN5600-AutoInsurance</string>
     <string name="company">AutoInsurance</string>
+    <string name="app_package">no.uio.ifi.oscarlr.in5600_autoinsurance</string>
 
     <!-- LoginActivity -->
     <string name="email_login">Email</string>
@@ -51,6 +52,7 @@
     <string name="claim_card_status">Status</string>
     <string name="claim_image_contentDescription">Image from claim</string>
     <string name="claim_card_replace_button_text">Replace</string>
+    <string name="claim_card_see_details_button_text">See details</string>
     <string name="claim_card_delete_button_text">Delete</string>
 
     <!-- BottomNavigation -->
@@ -69,7 +71,11 @@
     <!-- Settings -->
     <string name="toggle_app_theme_switch_settings">Toggle Dark Mode</string>
     <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
-    <string name="app_package">no.uio.ifi.oscarlr.in5600_autoinsurance</string>
-    <string name="claim_card_see_details_button_text">See details</string>
+
+    <!-- Claim Details -->
+    <string name="claim_details_title">Title</string>
+    <string name="claim_details_status">Status</string>
+    <string name="claim_details_description">Description</string>
+    <string name="claim_details_location">Location</string>
 
 </resources>
