@@ -83,6 +83,8 @@ public class ProfileFragment extends Fragment {
         editor.clear();
         editor.apply();
 
+        // TODO: Delete other internal data structures such as claim images
+
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
 

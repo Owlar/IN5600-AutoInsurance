@@ -91,8 +91,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
         createRecyclerView(view);
 
-        view.findViewById(R.id.floating_action_button).setEnabled(false);
-
         view.findViewById(R.id.floating_action_button).setOnClickListener(view1 -> {
             if (numberOfClaims >= MAX_NUMBER_OF_CLAIMS) {
                 Toast.makeText(getActivity(), "Max claims reached", Toast.LENGTH_LONG).show();
@@ -115,7 +113,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
         @SuppressLint("NotifyDataSetChanged")
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
-            view.findViewById(R.id.floating_action_button).setEnabled(true);
             try {
                 numberOfClaims = Integer.parseInt(response.getString("numberOfClaims"));
                 JSONArray jsonArrayClaimDes = response.getJSONArray("claimDes");

@@ -2,9 +2,12 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,7 +116,11 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return searchLocation();
+                if (isNetworkAvailable()) {
+                    return searchLocation();
+                }
+                Toast.makeText(requireContext(), "No network connection", Toast.LENGTH_SHORT).show();
+                return false;
             }
 
             @Override
@@ -149,6 +156,12 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         return false;
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -171,8 +184,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 lastPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                                logLastPosition();
-
                                 if (createNewMarker() != null) {
                                     goToMarkedPosition();
                                 }
@@ -185,6 +196,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
     }
 
     private Marker createNewMarker() {
+        searchView.setQuery("", false);
         mMap.clear();
 
         MarkerOptions markerOptions = new MarkerOptions();
@@ -192,6 +204,8 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         markerOptions.snippet("My Description");
         markerOptions.position(lastPosition);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+        logLastPosition();
 
         return mMap.addMarker(markerOptions);
     }
@@ -224,18 +238,10 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
 
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.title("My Position");
-        markerOptions.snippet("My Description");
-        markerOptions.position(latLng);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-        mMap.clear();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-        mMap.addMarker(markerOptions);
-
         lastPosition = latLng;
-
-        logLastPosition();
+        if (createNewMarker() != null) {
+            goToMarkedPosition();
+        }
     }
 
     @Override
