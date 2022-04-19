@@ -143,7 +143,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
             }
 
             Address address;
-            if (addresses != null) {
+            if (addresses != null && addresses.size() > 0) {
                 address = addresses.get(0);
                 lastPosition = new LatLng(address.getLatitude(), address.getLongitude());
                 if (createNewMarker() != null) {

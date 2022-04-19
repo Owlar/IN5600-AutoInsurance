@@ -8,7 +8,7 @@
         android:id="@+id/dialog_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#5e35d1"
+        app:cardBackgroundColor="@color/blue_variant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

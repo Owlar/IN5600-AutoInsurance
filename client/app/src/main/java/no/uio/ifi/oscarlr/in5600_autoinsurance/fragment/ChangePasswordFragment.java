@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel;
@@ -42,9 +43,6 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel
 public class ChangePasswordFragment extends Fragment {
 
     private static final String TAG = "ChangePasswordFragment";
-
-    // TODO: Get email through DataProcessor
-    private SharedPreferences sharedPreferences;
 
     private EditText editText_newPassword;
     private EditText editText_confirmNewPassword;
@@ -55,14 +53,15 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        email = sharedPreferences.getString(KEY_EMAIL, "0");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
+
+        DataProcessor dataProcessor = new DataProcessor(getContext());
+        email = dataProcessor.getEmail();
 
         TextView textView = view.findViewById(R.id.textView_email);
         if (email != null && !email.isEmpty()) {

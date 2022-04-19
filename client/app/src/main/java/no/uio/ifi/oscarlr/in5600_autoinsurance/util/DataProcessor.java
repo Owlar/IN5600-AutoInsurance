@@ -2,6 +2,7 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.util;
 
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_CLAIMS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_DISPLAY_MODE;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_EMAIL;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
 import android.content.Context;
@@ -34,6 +35,10 @@ public class DataProcessor {
         this.context = ctx;
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
+    }
+
+    public String getEmail() {
+        return sharedPreferences.getString(KEY_EMAIL, "0");
     }
 
     public void setClaims(List<Claim> claims) {

@@ -22,7 +22,7 @@
     <string name="settings_content_description_profile">Go to settings</string>
 
     <!-- Dialog -->
-    <string name="new_claim_dialog">New claim</string>
+    <string name="new_claim_dialog">New Claim</string>
 
     <!-- ChangePasswordFragment -->
     <string name="change_password_change_password">Change</string>
@@ -31,13 +31,11 @@
 
     <!-- ViewPager2 -->
     <string name="new_claim_description">1. Description</string>
-    <string name="new_claim_description_write_about">Write about…</string>
     <string name="new_claim_intro_description">1. Description</string>
     <string name="new_claim_photo_title">2. Photo</string>
     <string name="new_claim_location_title">3. Location</string>
     <string name="new_claim_location_button_text">My Location</string>
     <string name="new_claim_location_search">Search here</string>
-    <string name="new_claim_dotdotdot_subtitle">…</string>
     <string name="new_claim_summary_title">Summary</string>
 
     <string name="back_text_button">Back</string>
@@ -77,5 +75,8 @@
     <string name="claim_details_status">Status</string>
     <string name="claim_details_description">Description</string>
     <string name="claim_details_location">Location</string>
+    <string name="new_claim_description_write_about">Write about...</string>
+    <string name="new_claim_photo_pick_image">Pick image</string>
+    <string name="new_claim_photo_camera">Take photo</string>
 
 </resources>
