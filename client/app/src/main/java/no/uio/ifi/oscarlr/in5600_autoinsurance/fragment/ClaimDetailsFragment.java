@@ -79,7 +79,6 @@ public class ClaimDetailsFragment extends Fragment {
         description.setText(claim.getClaimDes());
         location.setText(claim.getClaimLocation());
 
-        // TODO: claim.getClaimPhotoBitmap() is null for some reason
         File f = new File(claim.getClaimPhotoFilepath());
         if (f.exists())
             imageView.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));

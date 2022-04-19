@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
+import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -81,9 +82,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
         for (Claim claim : claimList) {
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.title("Id: " + claim.getClaimId());
+            markerOptions.title("Claim: " + claim.getClaimId());
             markerOptions.snippet(claim.getClaimDes());
-            // TODO: Check if have to use getClaimPosition() when there are no claims on server
             markerOptions.position(MapUtil.stringLocationToLatLng(claim.getClaimLocation()));
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
@@ -98,12 +98,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapClick(@NonNull LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-        mMap.addMarker(markerOptions);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+
+        Marker noClaimMarker = mMap.addMarker(markerOptions);
+        assert noClaimMarker != null;
+
+        noClaimMarker.setTag(-1);
     }
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
+        // No claim so don't show info window
+        if (Objects.requireNonNull(marker.getTag()).equals(-1)) return;
+
         Log.i(TAG, "Clicked on marker " + marker.getTag() + "'s InfoWindow");
 
         ClaimDetailsViewModel viewModel = new ViewModelProvider(requireActivity()).get(ClaimDetailsViewModel.class);
