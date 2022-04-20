@@ -119,6 +119,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 JSONArray jsonArrayClaimPosition = response.getJSONArray("claimLocation");
                 JSONArray jsonArrayClaimId = response.getJSONArray("claimId");
                 JSONArray jsonArrayClaimPhoto = response.getJSONArray("claimPhoto");
+                JSONArray jsonArrayClaimStatus = response.getJSONArray("claimStatus");
 
                 // If a claim's image is not stored locally, need to download from server
                 boolean waitingOnServerPhotoDownload = false;
@@ -129,8 +130,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                     claim.setClaimDes(jsonArrayClaimDes.get(i).toString());
                     claim.setClaimLocation(jsonArrayClaimPosition.get(i).toString());
                     claim.setClaimId(jsonArrayClaimId.get(i).toString());
-                    // TODO: Set status
-                    claim.setClaimStatus("Active");
+                    claim.setClaimStatus(jsonArrayClaimStatus.get(i).toString());
                     try {
                         String filepathSavedOnServer = jsonArrayClaimPhoto.get(i).toString();
                         File file = new File(filepathSavedOnServer);

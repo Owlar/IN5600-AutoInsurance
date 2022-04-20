@@ -41,6 +41,10 @@ public class DataProcessor {
         this.editor = sharedPreferences.edit();
     }
 
+    public String getUserId() {
+        return String.valueOf(sharedPreferences.getInt(KEY_ID, 0));
+    }
+
     public String getFirstName() {
         return sharedPreferences.getString(KEY_FIRST_NAME, null);
     }

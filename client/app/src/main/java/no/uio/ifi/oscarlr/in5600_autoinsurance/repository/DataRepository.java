@@ -25,7 +25,9 @@ import java.util.Map;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.MainActivity;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.ProfileFragment;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.ClaimStatus;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 
@@ -114,6 +116,62 @@ public class DataRepository {
                 map.put("em", email);
                 map.put("np", newPassword.getText().toString());
                 map.put("ph", Hash.toMD5(newPassword.getText().toString()));
+                return map;
+            }
+        };
+    }
+
+    public StringRequest postRemoteInsertNewClaim(String userId, String indexUpdateClaim, Claim claim) {
+        return new StringRequest(Request.Method.POST,  URL + "/postInsertNewClaim", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("OK"))
+                    Toast.makeText(ctx.getApplicationContext(), ClaimStatus.OPENED + " claim", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", userId);
+                map.put("indexUpdateClaim", indexUpdateClaim);
+                map.put("newClaimDes", claim.getClaimDes());
+                map.put("newClaimPho", claim.getClaimPhotoFilepath());
+                map.put("newClaimLoc", claim.getClaimLocation());
+                map.put("newClaimSta", ClaimStatus.OPENED.toString());
+                return map;
+            }
+        };
+    }
+
+    public StringRequest postRemoteUpdateClaim(String userId, String indexUpdateClaim, Claim claim) {
+        return new StringRequest(Request.Method.POST,  URL + "/postUpdateClaim", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("OK"))
+                    Toast.makeText(ctx.getApplicationContext(), ClaimStatus.REOPENED + " claim", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", userId);
+                map.put("indexUpdateClaim", indexUpdateClaim);
+                map.put("updateClaimDes", claim.getClaimDes());
+                map.put("updateClaimPho", claim.getClaimPhotoFilepath());
+                map.put("updateClaimLoc", claim.getClaimLocation());
+                map.put("updateClaimSta", ClaimStatus.REOPENED.toString());
                 return map;
             }
         };
