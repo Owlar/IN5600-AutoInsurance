@@ -1,11 +1,8 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,22 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel;
 
@@ -77,7 +65,6 @@ public class ChangePasswordFragment extends Fragment {
 
         ChangePasswordViewModel viewModel = new ViewModelProvider(requireActivity()).get(ChangePasswordViewModel.class);
 
-        // Below in onCreateView is two-way data binding
         viewModel.getNewPassword().observe(getViewLifecycleOwner(), newPassword -> {
             if (!editText_newPassword.getText().toString().equals(newPassword))
                 editText_newPassword.setText(newPassword);
@@ -126,51 +113,15 @@ public class ChangePasswordFragment extends Fragment {
             Toast.makeText(requireContext(), "Passwords are not the same!", Toast.LENGTH_SHORT).show();
             return;
         }
-        newPassword = editText_confirmNewPassword.getText().toString();
+        DataRepository dataRepository = new DataRepository(requireActivity());
+        StringRequest stringRequest = dataRepository.postRemoteChangePassword(
+                email,
+                editText_newPassword,
+                editText_confirmNewPassword,
+                getParentFragmentManager().beginTransaction()
+        );
 
-        RequestQueue requestQueue = VolleySingleton.getInstance(requireActivity().getApplicationContext()).getRequestQueue();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostChangePasswd", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    Log.i(TAG, response);
-                    if (response.equals("OK")) {
-                        editText_newPassword.getText().clear();
-                        editText_confirmNewPassword.getText().clear();
-
-                        goToProfileFragment();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(requireActivity().getApplicationContext(), "Couldn't change password, please try again!", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @NonNull
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("em", email);
-                map.put("np", newPassword);
-                map.put("ph", Hash.toMD5(newPassword));
-                return map;
-            }
-        };
         VolleySingleton.getInstance(requireActivity().getApplicationContext()).addToRequestQueue(stringRequest);
-
     }
 
-    public void goToProfileFragment() {
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_view, new ProfileFragment());
-        fragmentTransaction.commit();
-
-        Toast.makeText(requireActivity().getApplicationContext(), "Password has been changed", Toast.LENGTH_SHORT).show();
-
-    }
 }

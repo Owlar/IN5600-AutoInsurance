@@ -124,4 +124,9 @@ public class DataProcessor {
         }
         return displayMode;
     }
+
+    public void clear() {
+        editor.clear();
+        editor.apply();
+    }
 }

@@ -1,10 +1,6 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,11 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class ProfileFragment extends Fragment {
-
-    private SharedPreferences sharedPreferences;
-
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -32,8 +26,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -79,9 +71,8 @@ public class ProfileFragment extends Fragment {
     }
 
     public void logout() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        DataProcessor dataProcessor = new DataProcessor(requireActivity());
+        dataProcessor.clear();
 
         // TODO: Delete other internal data structures such as claim images
 
