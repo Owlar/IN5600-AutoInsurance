@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // https://developer.android.com/guide/fragments/create
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
         }

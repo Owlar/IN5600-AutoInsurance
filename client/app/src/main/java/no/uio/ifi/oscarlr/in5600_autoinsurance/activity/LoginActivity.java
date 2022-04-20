@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
 
-    private SharedPreferences sharedPreferences;
     private ActivityResultLauncher<String[]> activityResultLauncherPermissions;
 
     @Override
@@ -52,22 +51,19 @@ public class LoginActivity extends AppCompatActivity {
 
         getSavedDisplayMode();
 
+        DataProcessor dataProcessor = new DataProcessor(getApplicationContext());
+
         activityResultLauncherPermissions = registerForActivityResult(
-                new ActivityResultContracts.RequestMultiplePermissions(),
-                new ActivityResultCallback<Map<String, Boolean>>() {
+                new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
                     @Override
                     public void onActivityResult(Map<String, Boolean> permissions) {
                         for (Map.Entry<String, Boolean> entry : permissions.entrySet()) {
-//                        Log.d("test", entry.getKey() + ", " + entry.getValue());
                             if (!entry.getValue()) {
                                 return;
                             }
                         }
-                        // Proceed, if permissions are granted
-
-                        sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
                         // If user is already logged in, go directly to MainActivity
-                        if (sharedPreferences.getString(KEY_FIRST_NAME, null) != null) {
+                        if (dataProcessor.getFirstName() != null) {
                             Log.i(TAG, "User is already logged in.");
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
@@ -85,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
 
-        // Below in onCreate is two-way data binding
+        // Two-way data binding
         viewModel.getEmail().observe(this, e -> {
             // Check that changes were made
             if (!email.getText().toString().equals(e))
