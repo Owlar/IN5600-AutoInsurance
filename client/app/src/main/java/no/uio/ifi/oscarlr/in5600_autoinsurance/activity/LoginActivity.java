@@ -1,11 +1,7 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.activity;
 
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_EMAIL;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_FIRST_NAME;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
-import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,26 +19,17 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
@@ -149,50 +136,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostRemoteLogin", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    User user = new User(
-                            jsonObject.getInt("id"),
-                            jsonObject.getString("firstName"),
-                            jsonObject.getString("lastName"),
-                            jsonObject.getString("passClear"),
-                            jsonObject.getString("passHash"),
-                            jsonObject.getString("email")
-                    );
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt(KEY_ID, user.getId());
-                    editor.putString(KEY_FIRST_NAME, user.getFirstName());
-                    editor.putString(KEY_LAST_NAME, user.getLastName());
-                    editor.putString(KEY_EMAIL, user.getEmail());
-                    editor.apply();
-
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Couldn't login, please try again!", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @NonNull
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("em", email.getText().toString());
-                map.put("ph", Hash.toMD5(password.getText().toString()));
-                return map;
-            }
-        };
+        DataRepository dataRepository = new DataRepository(getApplicationContext());
+        StringRequest stringRequest = dataRepository.postRemoteLogin(email.getText().toString(), Hash.toMD5(password.getText().toString()));
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 

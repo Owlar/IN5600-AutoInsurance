@@ -3,6 +3,9 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.util;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_CLAIMS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_DISPLAY_MODE;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_EMAIL;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_FIRST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
 import android.content.Context;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 
 public class DataProcessor {
 
@@ -39,6 +43,14 @@ public class DataProcessor {
 
     public String getEmail() {
         return sharedPreferences.getString(KEY_EMAIL, "0");
+    }
+
+    public void setUser(User user) {
+        editor.putInt(KEY_ID, user.getId());
+        editor.putString(KEY_FIRST_NAME, user.getFirstName());
+        editor.putString(KEY_LAST_NAME, user.getLastName());
+        editor.putString(KEY_EMAIL, user.getEmail());
+        editor.apply();
     }
 
     public void setClaims(List<Claim> claims) {
