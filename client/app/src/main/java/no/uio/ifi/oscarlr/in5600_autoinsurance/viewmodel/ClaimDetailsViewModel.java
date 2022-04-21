@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 public class ClaimDetailsViewModel extends ViewModel {
 
-    private MutableLiveData<Object> obj = new MutableLiveData<>();
+    private final MutableLiveData<Object> obj = new MutableLiveData<>();
 
     public LiveData<Object> getObject() {
         return obj;

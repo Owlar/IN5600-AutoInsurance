@@ -59,6 +59,10 @@ public class ClaimDetailsFragment extends Fragment {
             getClaim(Integer.parseInt(object.toString()));
         });
 
+        view.findViewById(R.id.claim_details_back_button).setOnClickListener(v -> {
+            getParentFragmentManager().popBackStackImmediate();
+        });
+
         return view;
     }
 
@@ -72,10 +76,11 @@ public class ClaimDetailsFragment extends Fragment {
     }
 
     private void setClaimDetails(Claim claim) {
-        String text = "Claim: " + claim.getClaimId();
+        String text = "Claim ID: " + claim.getClaimId();
         title.setText(text);
 
-        status.setText(claim.getClaimStatus());
+        String statusTxt = "Status: " + claim.getClaimStatus();
+        status.setText(statusTxt);
         description.setText(claim.getClaimDes());
         location.setText(claim.getClaimLocation());
 

@@ -1,11 +1,14 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -14,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.android.volley.toolbox.StringRequest;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
@@ -39,7 +43,7 @@ public class NewClaimSummaryScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_claim_summary_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_claim_summary_screen, container, false);
 
         view.findViewById(R.id.backButtonSummaryScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(3));
 
@@ -67,6 +71,8 @@ public class NewClaimSummaryScreen extends Fragment {
             dialogFragment.dismiss();
         });
 
+        setClaimDetails(view);
+
         // TODO: Implement commented out as map in getParams() in postMethodUploadPhoto() method
         /*
         Map<String, String> map = new HashMap<>();
@@ -79,6 +85,28 @@ public class NewClaimSummaryScreen extends Fragment {
          */
 
         return view;
+    }
+
+    private void setClaimDetails(View view) {
+        TextView title = view.findViewById(R.id.claim_details_title);
+        TextView status = view.findViewById(R.id.claim_details_status);
+        TextView description = view.findViewById(R.id.claim_details_description);
+        TextView location = view.findViewById(R.id.claim_details_location);
+        ImageView imageView = view.findViewById(R.id.claim_details_image);
+
+        Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
+
+        String text = "Claim ID: " + claim.getClaimId();
+        title.setText(text);
+
+        String statusTxt = "Status: " + claim.getClaimStatus();
+        status.setText(statusTxt);
+        description.setText(claim.getClaimDes());
+        location.setText(claim.getClaimLocation());
+
+        File f = new File(claim.getClaimPhotoFilepath());
+        if (f.exists())
+            imageView.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
     }
 
     private void saveToLocalStorage(boolean replace) {

@@ -8,7 +8,7 @@
     tools:context=".new_claim.NewClaimIntroScreen">
 
     <TextView
-        android:id="@+id/screenTwoTitle"
+        android:id="@+id/claimSummaryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -20,16 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/screenTwoSubtitle"
-        android:layout_width="wrap_content"
+    <include layout="@layout/claim_details_summary_content"
+        app:layout_constraintTop_toBottomOf="@id/claimSummaryTitle"
+        app:layout_constraintBottom_toTopOf="@id/backButtonSummaryScreen"
+        app:layout_constrainedHeight="true"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/screenTwoTitle" />
+        android:layout_width="match_parent" />
 
     <TextView
         android:id="@+id/backButtonSummaryScreen"

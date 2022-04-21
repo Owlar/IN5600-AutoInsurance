@@ -43,7 +43,7 @@
     <string name="finish_text_button">Finish</string>
 
     <!-- Cards (claims) in RecyclerView -->
-    <string name="claim_card_title">Title (date maybe?)</string>
+    <string name="claim_card_title">Title</string>
     <string name="claim_card_description">Description</string>
     <string name="claim_card_photo">Photo</string>
     <string name="claim_card_location">Location</string>
@@ -71,11 +71,12 @@
     <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
 
     <!-- Claim Details -->
+    <string name="claim_details_action_bar_title">Claim details</string>
     <string name="claim_details_title">Title</string>
     <string name="claim_details_status">Status</string>
-    <string name="claim_details_description">Description</string>
+    <string name="claim_details_description">Description: </string>
     <string name="claim_details_location">Location</string>
-    <string name="new_claim_description_write_about">Write about...</string>
+    <string name="new_claim_description_write_about">Write about…</string>
     <string name="new_claim_photo_pick_image">Pick image</string>
     <string name="new_claim_photo_camera">Take photo</string>
 

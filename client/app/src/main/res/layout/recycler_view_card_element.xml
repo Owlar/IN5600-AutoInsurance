@@ -13,34 +13,22 @@
 
         <ImageView
             android:id="@+id/cardPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:maxHeight="150dp"
             android:src="@color/blue_variant"
-            android:contentDescription="@string/claim_image_contentDescription" />
+            android:contentDescription="@string/claim_image_contentDescription"
+            android:padding="16dp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/cardDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/claim_card_title"
-                android:textSize="16sp"
-                android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-            <TextView
-                android:id="@+id/cardDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/claim_card_description"
-                android:textSize="14sp"
-                android:textColor="#575757" />
-
-        </LinearLayout>
+            android:text="@string/claim_card_description"
+            android:textSize="14sp"
+            android:textColor="#575757"
+            android:padding="16dp"/>
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
