@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,8 +42,13 @@ public class NewClaimDialogFragment extends DialogFragment {
             NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
             newClaimSingleton.initNewClaim();
         }
+        else {
+            TextView textView = view.findViewById(R.id.claimDialogTitle);
+            textView.setText(R.string.replace_claim_dialog);
+        }
 
         ViewPager2 viewPager = view.findViewById(R.id.ViewPager);
+        viewPager.setOffscreenPageLimit(1); // Fixes editText losing focus on Description page, for some reason...
 
         // For GoogleMaps and overall consistency between pages
         viewPager.setUserInputEnabled(false);

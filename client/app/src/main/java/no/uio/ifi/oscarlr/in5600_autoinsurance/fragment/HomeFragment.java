@@ -192,6 +192,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 if (processorClaims != null) {
                     claims.addAll(processorClaims);
                     recyclerViewAdapter.notifyDataSetChanged();
+                    NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
+                    newClaimSingleton.setClaims(claims);
                 }
 
                 numberOfClaims = claims.size();

@@ -23,14 +23,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:src="@drawable/ic_baseline_clear_24" />
 
             <TextView
+                android:id="@+id/claimDialogTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/fullscreenDialogClose"
                 android:text="@string/new_claim_dialog" />
 

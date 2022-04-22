@@ -36,6 +36,7 @@ public class NewClaimSingleton {
 
     public void initNewClaim() {
         newClaim = new Claim();
+        newClaim.setClaimId(String.valueOf(claims.size()));
     }
 
     public List<Claim> getClaims() {

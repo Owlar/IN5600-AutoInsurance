@@ -23,6 +23,7 @@
 
     <!-- Dialog -->
     <string name="new_claim_dialog">New Claim</string>
+    <string name="replace_claim_dialog">Replace claim</string>
 
     <!-- ChangePasswordFragment -->
     <string name="change_password_change_password">Change</string>
