@@ -33,7 +33,6 @@ public class NewClaimSummaryScreen extends Fragment {
     private final NewClaimSingleton newClaimSingleton;
 
     private TextView title;
-    private TextView status;
     private TextView description;
     private TextView location;
     private ImageView imageView;
@@ -52,7 +51,6 @@ public class NewClaimSummaryScreen extends Fragment {
         View view = inflater.inflate(R.layout.fragment_claim_summary_screen, container, false);
 
         title = view.findViewById(R.id.claim_details_title);
-        status = view.findViewById(R.id.claim_details_status);
         description = view.findViewById(R.id.claim_details_description);
         location = view.findViewById(R.id.claim_details_location);
         imageView = view.findViewById(R.id.claim_details_image);
@@ -98,6 +96,7 @@ public class NewClaimSummaryScreen extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // TODO: Consider another way to do this
         /* It's here because ViewPager creates Summary screen and Location screen at the same time */
         setClaimDetails();
     }
@@ -105,30 +104,16 @@ public class NewClaimSummaryScreen extends Fragment {
     private void setClaimDetails() {
         Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
 
-        String text = "Claim ID: " + newClaimSingleton.getNumberOfClaims();
-        title.setText(text);
-
-        String statusTxt = "Status: " + claim.getClaimStatus();
-        if (claim.getClaimStatus() != null) {
-            status.setText(statusTxt);
+        if (claim.getClaimId() != null) {
+            String text = "Claim ID: " + claim.getClaimId();
+            title.setText(text);
         }
-
         description.setText(claim.getClaimDes());
         location.setText(claim.getClaimLocation());
 
         File f = new File(claim.getClaimPhotoFilepath());
         if (f.exists())
             imageView.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
-    }
-
-    private void saveToLocalStorage(boolean replace) {
-        DataProcessor dataProcessor = new DataProcessor(getContext());
-
-        Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
-        String id = (replaceClaimWithID == -1) ? newClaimSingleton.getNumberOfClaims() : String.valueOf(replaceClaimWithID);
-        claim.setClaimId(id);
-
-        dataProcessor.setClaimById(id, claim, replace);
     }
 
     private String convertImageToString() {
