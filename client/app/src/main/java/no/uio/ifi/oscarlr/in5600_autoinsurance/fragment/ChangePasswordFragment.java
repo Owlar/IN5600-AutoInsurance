@@ -52,6 +52,10 @@ public class ChangePasswordFragment extends Fragment {
             textView.setText(email);
         }
 
+        view.findViewById(R.id.change_password_back_button).setOnClickListener(v -> {
+            getParentFragmentManager().popBackStackImmediate();
+        });
+
         Button button = view.findViewById(R.id.change_password);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -28,6 +28,7 @@
     <string name="change_password_change_password">Change</string>
     <string name="type_a_new_password_change_password">Type a new password</string>
     <string name="confirm_the_new_password_change_password">Confirm the new password</string>
+    <string name="action_bar_title_change_password">Change Password</string>
 
     <!-- ViewPager2 -->
     <string name="new_claim_description">1. Description</string>
@@ -37,6 +38,9 @@
     <string name="new_claim_location_button_text">My Location</string>
     <string name="new_claim_location_search">Search here</string>
     <string name="new_claim_summary_title">Summary</string>
+    <string name="new_claim_description_write_about">Write about…</string>
+    <string name="new_claim_photo_pick_image">Pick image</string>
+    <string name="new_claim_photo_camera">Take photo</string>
 
     <string name="back_text_button">Back</string>
     <string name="next_text_button">Next</string>
@@ -71,13 +75,13 @@
     <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
 
     <!-- Claim Details -->
-    <string name="claim_details_action_bar_title">Claim details</string>
+    <string name="claim_details_action_bar_title">Claim Details</string>
     <string name="claim_details_title">Title</string>
     <string name="claim_details_status">Status</string>
     <string name="claim_details_description">Description: </string>
     <string name="claim_details_location">Location</string>
-    <string name="new_claim_description_write_about">Write about…</string>
-    <string name="new_claim_photo_pick_image">Pick image</string>
-    <string name="new_claim_photo_camera">Take photo</string>
+
+    <!-- Top Bar -->
+    <string name="back_arrow_content_description">Back arrow</string>
 
 </resources>
