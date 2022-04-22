@@ -32,6 +32,12 @@ public class NewClaimSummaryScreen extends Fragment {
     private final int replaceClaimWithID;
     private final NewClaimSingleton newClaimSingleton;
 
+    private TextView title;
+    private TextView status;
+    private TextView description;
+    private TextView location;
+    private ImageView imageView;
+
     public NewClaimSummaryScreen(ViewPager2 viewPager, DialogFragment dialogFragment, int replaceClaimWithID) {
         this.viewPager = viewPager;
         this.dialogFragment = dialogFragment;
@@ -45,6 +51,12 @@ public class NewClaimSummaryScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_claim_summary_screen, container, false);
 
+        title = view.findViewById(R.id.claim_details_title);
+        status = view.findViewById(R.id.claim_details_status);
+        description = view.findViewById(R.id.claim_details_description);
+        location = view.findViewById(R.id.claim_details_location);
+        imageView = view.findViewById(R.id.claim_details_image);
+
         view.findViewById(R.id.backButtonSummaryScreen).setOnClickListener(view1 -> viewPager.setCurrentItem(3));
 
         view.findViewById(R.id.finishButtonSummaryScreen).setOnClickListener(view1 -> {
@@ -52,55 +64,55 @@ public class NewClaimSummaryScreen extends Fragment {
             DataRepository dataRepository = new DataRepository(requireContext());
             DataProcessor dataProcessor = new DataProcessor(requireContext());
             StringRequest stringRequest;
-            String indexUpdateClaim;
+            StringRequest photoUploadRequest;
+            String index;
             String userId = dataProcessor.getUserId();
             Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
 
             if (replaceClaimWithID == -1) {
-                indexUpdateClaim = newClaimSingleton.getNumberOfClaims();
-                stringRequest = dataRepository.postRemoteInsertNewClaim(userId, indexUpdateClaim, claim);
+                index = newClaimSingleton.getNumberOfClaims();
+
+                stringRequest = dataRepository.postRemoteInsertNewClaim(userId, index, claim);
+                photoUploadRequest = dataRepository.postRemoteUploadPhoto( userId, index, claim, convertImageToString() );
+
+                dataProcessor.setClaimById(index, claim, false);
             }
             else {
-                indexUpdateClaim = String.valueOf(replaceClaimWithID);
-                stringRequest = dataRepository.postRemoteUpdateClaim(userId, indexUpdateClaim, claim);
+                index = String.valueOf(replaceClaimWithID);
+
+                stringRequest = dataRepository.postRemoteUpdateClaim(userId, index, claim);
+                photoUploadRequest = dataRepository.postRemoteUploadPhoto( userId, index, claim, convertImageToString() );
+
+                dataProcessor.setClaimById(index, claim, true);
             }
             VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
-
-            saveToLocalStorage(replaceClaimWithID != -1);
+            VolleySingleton.getInstance(getActivity()).addToRequestQueue(photoUploadRequest);
 
             dialogFragment.dismiss();
         });
 
-        setClaimDetails(view);
-
-        // TODO: Implement commented out as map in getParams() in postMethodUploadPhoto() method
-        /*
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", userId);
-        map.put("claimId", (replaceClaimWithID == -1) ? newClaimSingleton.getNumberOfClaims() : String.valueOf(replaceClaimWithID));
-        map.put("fileName", SERVER_PATH_TO_SAVED_PHOTOS + claim.getClaimPhotoFilename() + SERVER_FILETYPE_FOR_SAVED_PHOTOS);
-//        Log.d("test", claim.getClaimPhotoFilepath());
-//        Log.d("test", claim.getClaimPhotoFilename());
-        map.put("imageStringBase64", convertImageToString());
-         */
-
         return view;
     }
 
-    private void setClaimDetails(View view) {
-        TextView title = view.findViewById(R.id.claim_details_title);
-        TextView status = view.findViewById(R.id.claim_details_status);
-        TextView description = view.findViewById(R.id.claim_details_description);
-        TextView location = view.findViewById(R.id.claim_details_location);
-        ImageView imageView = view.findViewById(R.id.claim_details_image);
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        /* It's here because ViewPager creates Summary screen and Location screen at the same time */
+        setClaimDetails();
+    }
+
+    private void setClaimDetails() {
         Claim claim = newClaimSingleton.getClaim(replaceClaimWithID);
 
-        String text = "Claim ID: " + claim.getClaimId();
+        String text = "Claim ID: " + newClaimSingleton.getNumberOfClaims();
         title.setText(text);
 
         String statusTxt = "Status: " + claim.getClaimStatus();
-        status.setText(statusTxt);
+        if (claim.getClaimStatus() != null) {
+            status.setText(statusTxt);
+        }
+
         description.setText(claim.getClaimDes());
         location.setText(claim.getClaimLocation());
 

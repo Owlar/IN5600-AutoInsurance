@@ -75,7 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void showClaims() {
         DataProcessor dataProcessor = new DataProcessor(requireActivity());
         List<Claim> claimList = dataProcessor.getClaims();
-        if (claimList == null) {
+        if (claimList == null || claimList.isEmpty()) {
             Toast.makeText(requireActivity(), "You have no claims to show on map", Toast.LENGTH_LONG).show();
             return;
         }

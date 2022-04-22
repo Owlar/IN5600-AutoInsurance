@@ -4,6 +4,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConsta
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class DataRepository {
 
     private final Context ctx;
     private final DataProcessor dataProcessor;
+    private static final String TAG = "DataRepository";
 
     public DataRepository(Context ctx) {
         this.ctx = ctx;
@@ -175,5 +177,32 @@ public class DataRepository {
                 return map;
             }
         };
+    }
+
+    public StringRequest postRemoteUploadPhoto(String userId, String claimId, Claim claim, String imageStringBase64) {
+        return new StringRequest(Request.Method.POST,  URL + "/postMethodUploadPhoto", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("OK"))
+                    Log.i(TAG, "Photo uploaded successfully");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", userId);
+                map.put("claimId", claimId);
+                map.put("fileName", claim.getClaimPhotoFilename());
+                map.put("imageStringBase64", imageStringBase64);
+                return map;
+            }
+        };
+
     }
 }
