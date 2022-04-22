@@ -83,5 +83,6 @@
 
     <!-- Top Bar -->
     <string name="back_arrow_content_description">Back arrow</string>
+    <string name="action_bar_title_settings">Settings</string>
 
 </resources>

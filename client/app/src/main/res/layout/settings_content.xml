@@ -1,0 +1,22 @@
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="0,1"
+    android:layout_margin="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TableRow>
+
+        <TextView android:text="@string/toggle_app_theme_switch_settings" />
+        <com.google.android.material.switchmaterial.SwitchMaterial android:id="@+id/switch_app_theme" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView android:text="@string/toggle_offline_mode_switch_settings" />
+        <com.google.android.material.switchmaterial.SwitchMaterial android:id="@+id/switch_offline_mode" />
+
+    </TableRow>
+
+</TableLayout>

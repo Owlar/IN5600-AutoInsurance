@@ -33,6 +33,10 @@ public class SettingsFragment extends Fragment {
         SwitchMaterial switchAppTheme = view.findViewById(R.id.switch_app_theme);
         SwitchMaterial switchOfflineMode = view.findViewById(R.id.switch_offline_mode);
 
+        view.findViewById(R.id.settings_back_button).setOnClickListener(v -> {
+            getParentFragmentManager().popBackStackImmediate();
+        });
+
         SettingsViewModel viewModel = new ViewModelProvider(requireActivity()).get(SettingsViewModel.class);
 
         // Switch should be initially checked/unchecked depending on night/day in shared preferences
