@@ -61,6 +61,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
 
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
+    private static final String TAG = "HomeFragment";
     private SharedPreferences sharedPreferences;
     private int numberOfClaims = 0;
     private final int MAX_NUMBER_OF_CLAIMS = 5;
@@ -178,7 +179,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                     view.findViewById(R.id.textView_forEmpty_recyclerView).setVisibility(View.INVISIBLE);
                 }
             } catch (JSONException e) {
-                Log.d("Home", e.toString());
+                Log.d(TAG, e.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -226,7 +227,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         // Handle dialog dismiss and recreate the RecyclerView
         getParentFragmentManager().registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
             @Override
-            public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
+            public void onFragmentViewDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
                 super.onFragmentViewDestroyed(fm, f);
                 getParentFragmentManager().unregisterFragmentLifecycleCallbacks(this);
 
@@ -254,11 +255,9 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     }
 
     public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {
-        String serverFileName = SERVER_PATH_TO_SAVED_PHOTOS + filename + SERVER_FILETYPE_FOR_SAVED_PHOTOS;
-        return new StringRequest(Request.Method.GET,  URL+ "/getMethodDownloadPhoto?fileName=" + serverFileName, new Response.Listener<String>() {
+        return new StringRequest(Request.Method.GET,  URL + "/getMethodDownloadPhoto?fileName=" + filename, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("test", "getMethodDownloadPhoto() onResponse()");
                 Bitmap bitmap = convertBase64StringToBitmap(response);
                 if (bitmap != null) {
                     File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -266,7 +265,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         File imageFile = File.createTempFile(filename, ".png", storageDir);
                         try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                            Log.d("test", imageFile.getAbsolutePath());
                             keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
 
                             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
