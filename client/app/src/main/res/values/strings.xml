@@ -59,7 +59,7 @@
     <string name="claim_card_delete_button_text">Delete</string>
 
     <!-- BottomNavigation -->
-    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_claims">Claims</string>
     <string name="bottom_navigation_map">Map</string>
     <string name="bottom_navigation_profile">Profile</string>
 

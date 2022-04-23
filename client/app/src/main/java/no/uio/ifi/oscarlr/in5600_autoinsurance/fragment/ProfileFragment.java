@@ -1,7 +1,9 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,8 +14,12 @@ import android.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.File;
+import java.util.List;
+
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class ProfileFragment extends Fragment {
@@ -72,9 +78,26 @@ public class ProfileFragment extends Fragment {
 
     public void logout() {
         DataProcessor dataProcessor = new DataProcessor(requireActivity());
-        dataProcessor.clear();
 
-        // TODO: Delete other internal data structures such as claim images
+        // Delete claim photos stored locally
+        List<Claim> claims = dataProcessor.getClaims();
+        if (claims != null) {
+            for (Claim c : claims) {
+                String filepath = c.getClaimPhotoFilepath();
+                File file = new File(filepath);
+                if (file.exists()) {
+                    boolean b = file.delete();
+                    Log.d("test", b +"");
+                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    intent.setData(Uri.fromFile(file));
+                    if (getContext() != null) {
+                        getContext().sendBroadcast(intent);
+                    }
+                }
+            }
+        }
+
+        dataProcessor.clear();
 
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
