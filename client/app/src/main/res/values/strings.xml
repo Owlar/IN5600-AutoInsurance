@@ -10,22 +10,26 @@
     <string name="button_txt_login">Login</string>
     <string name="skip_login">Skip login</string>
 
-    <!-- HomeFragment -->
+    <!-- Home -->
     <string name="new_insurance_claim_home">New insurance claim</string>
     <string name="see_existing_insurance_claims_home">See existing insurance claims</string>
     <string name="no_claims_available_home">No claims available</string>
     <string name="floating_action_button_home">Add new claim</string>
 
-    <!-- ProfileFragment -->
-    <string name="log_out_profile">Logout</string>
-    <string name="change_password_profile">Change password</string>
+    <!-- Profile -->
     <string name="settings_content_description_profile">Go to settings</string>
+    <string name="change_password_drawer_profile">Change Password</string>
+    <string name="logout_drawer_profile">Logout</string>
+    <string name="open_menu_profile">Open menu</string>
+    <string name="account_menu_item_profile">Account</string>
+    <string name="settings_profile">Settings</string>
+    <string name="user_picture_content_description_profile">User profile picture</string>
 
     <!-- Dialog -->
     <string name="new_claim_dialog">New Claim</string>
     <string name="replace_claim_dialog">Replace claim</string>
 
-    <!-- ChangePasswordFragment -->
+    <!-- Change Password -->
     <string name="change_password_change_password">Change</string>
     <string name="type_a_new_password_change_password">Type a new password</string>
     <string name="confirm_the_new_password_change_password">Confirm the new password</string>
@@ -53,7 +57,7 @@
     <string name="claim_card_photo">Photo</string>
     <string name="claim_card_location">Location</string>
     <string name="claim_card_status">Status</string>
-    <string name="claim_image_contentDescription">Image from claim</string>
+    <string name="claim_image_content_description">Image from claim</string>
     <string name="claim_card_replace_button_text">Replace</string>
     <string name="claim_card_see_details_button_text">See details</string>
     <string name="claim_card_delete_button_text">Delete</string>
@@ -62,14 +66,6 @@
     <string name="bottom_navigation_claims">Claims</string>
     <string name="bottom_navigation_map">Map</string>
     <string name="bottom_navigation_profile">Profile</string>
-
-    <!-- Profile -->
-    <string name="settings_drawer_profile">Settings</string>
-    <string name="change_password_drawer_profile">Change Password</string>
-    <string name="logout_drawer_profile">Logout</string>
-    <string name="open_menu_profile">Open menu</string>
-    <string name="account_menu_item_profile">Account</string>
-    <string name="settings_menu_item_profile">Settings</string>
 
     <!-- Settings -->
     <string name="toggle_app_theme_switch_settings">Toggle Dark Mode</string>

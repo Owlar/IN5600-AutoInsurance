@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +25,8 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class ProfileFragment extends Fragment {
+
+    private TextView textView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -38,6 +42,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        ImageView imageView = view.findViewById(R.id.user_profile_picture_profile);
+        if (imageView.getDrawable() == null)
+            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+
+        DataProcessor dataProcessor = new DataProcessor(getContext());
+        String email = dataProcessor.getEmail();
+
+        textView = view.findViewById(R.id.email_user_profile);
+        textView.setText(email);
 
         ImageButton menuButton = view.findViewById(R.id.menu_button_profile_fragment);
         menuButton.setOnClickListener(new View.OnClickListener() {

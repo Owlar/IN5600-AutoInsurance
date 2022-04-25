@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/screenPhotoTakePhotoButton"
 
-        android:contentDescription="@string/claim_image_contentDescription" />
+        android:contentDescription="@string/claim_image_content_description" />
 
 
     <TextView

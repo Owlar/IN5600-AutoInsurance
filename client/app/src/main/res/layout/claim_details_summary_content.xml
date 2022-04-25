@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:minHeight="200dp"
             android:src="@color/blue_variant"
-            android:contentDescription="@string/claim_image_contentDescription" />
+            android:contentDescription="@string/claim_image_content_description" />
 
     </TableLayout>
 
