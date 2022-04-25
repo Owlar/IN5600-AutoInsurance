@@ -69,7 +69,6 @@
 
     <!-- Settings -->
     <string name="toggle_app_theme_switch_settings">Toggle Dark Mode</string>
-    <string name="toggle_offline_mode_switch_settings">Toggle Offline Mode</string>
 
     <!-- Claim Details -->
     <string name="claim_details_action_bar_title">Claim Details</string>

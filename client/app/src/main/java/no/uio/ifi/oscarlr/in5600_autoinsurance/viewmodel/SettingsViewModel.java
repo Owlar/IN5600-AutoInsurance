@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 public class SettingsViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> checkedAppTheme = new MutableLiveData<>();
-    private MutableLiveData<Boolean> checkedOfflineMode = new MutableLiveData<>();
 
     public LiveData<Boolean> getCheckedAppTheme() {
         return checkedAppTheme;
@@ -17,11 +16,4 @@ public class SettingsViewModel extends ViewModel {
         this.checkedAppTheme.setValue(checked);
     }
 
-    public LiveData<Boolean> getCheckedOfflineMode() {
-        return checkedOfflineMode;
-    }
-
-    public void setCheckedOfflineMode(Boolean checked) {
-        this.checkedOfflineMode.setValue(checked);
-    }
 }

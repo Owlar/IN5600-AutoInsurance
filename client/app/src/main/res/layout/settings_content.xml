@@ -12,11 +12,4 @@
 
     </TableRow>
 
-    <TableRow>
-
-        <TextView android:text="@string/toggle_offline_mode_switch_settings" />
-        <com.google.android.material.switchmaterial.SwitchMaterial android:id="@+id/switch_offline_mode" />
-
-    </TableRow>
-
 </TableLayout>

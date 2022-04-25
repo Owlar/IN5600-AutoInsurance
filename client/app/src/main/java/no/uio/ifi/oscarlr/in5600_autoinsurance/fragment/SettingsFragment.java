@@ -31,7 +31,6 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         SwitchMaterial switchAppTheme = view.findViewById(R.id.switch_app_theme);
-        SwitchMaterial switchOfflineMode = view.findViewById(R.id.switch_offline_mode);
 
         view.findViewById(R.id.settings_back_button).setOnClickListener(v -> {
             getParentFragmentManager().popBackStackImmediate();
@@ -46,22 +45,11 @@ public class SettingsFragment extends Fragment {
             switchAppTheme.setChecked(checkedAppTheme);
         });
 
-        viewModel.getCheckedOfflineMode().observe(getViewLifecycleOwner(), checkedOfflineMode -> {
-            switchOfflineMode.setChecked(checkedOfflineMode);
-        });
-
         switchAppTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 viewModel.setCheckedAppTheme(isChecked);
                 setDisplayMode(isChecked);
-            }
-        });
-
-        switchOfflineMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                viewModel.setCheckedOfflineMode(isChecked);
             }
         });
 
