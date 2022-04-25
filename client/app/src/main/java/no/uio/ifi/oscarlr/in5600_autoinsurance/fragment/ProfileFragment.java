@@ -99,17 +99,14 @@ public class ProfileFragment extends Fragment {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_change_password:
-                                replaceFragment(new ChangePasswordFragment());
-                                break;
-                            case R.id.menu_log_out:
-                                logout();
-                                break;
-                            case R.id.menu_settings:
-                                replaceFragment(new SettingsFragment());
-                                break;
-                        }
+                        // Warning against using switch
+                        if (item.getItemId() == R.id.menu_change_password)
+                            replaceFragment(new ChangePasswordFragment());
+                        else if (item.getItemId() == R.id.menu_log_out)
+                            logout();
+                        else if (item.getItemId() == R.id.menu_settings)
+                            replaceFragment(new SettingsFragment());
+
                         return true;
                     }
                 });
@@ -172,10 +169,11 @@ public class ProfileFragment extends Fragment {
         if (claims != null) {
             for (Claim c : claims) {
                 String filepath = c.getClaimPhotoFilepath();
+                Log.d(TAG, "Filepath of claim image is: " + filepath);
                 File file = new File(filepath);
                 if (file.exists()) {
                     boolean b = file.delete();
-                    Log.d("test", b +"");
+                    Log.d(TAG, "Claim images were deleted: " + b);
                     Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     intent.setData(Uri.fromFile(file));
                     if (getContext() != null) {
@@ -184,8 +182,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         }
-
-        // TODO: Check if user profile pic is saved as new file, and if so delete it
 
         dataProcessor.clear();
 
