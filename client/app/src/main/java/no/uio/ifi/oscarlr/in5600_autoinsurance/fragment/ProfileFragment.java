@@ -1,8 +1,11 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,11 +16,20 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
@@ -26,10 +38,26 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class ProfileFragment extends Fragment {
 
+    private DataProcessor dataProcessor;
     private TextView textView;
+    private ImageView imageView;
+    private String currentPhotoPath;
+    private final ActivityResultLauncher<Intent> activityResultLauncherCamera;
+    private static final String TAG = "ProfileFragment";
 
     public ProfileFragment() {
-        // Required empty public constructor
+        activityResultLauncherCamera = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                            Uri uri = Uri.fromFile(new File(currentPhotoPath));
+                            imageView.setImageURI(uri);
+                            dataProcessor.setProfilePicPhotoPath(currentPhotoPath);
+                        }
+                    }
+                }
+        );
     }
 
 
@@ -43,15 +71,24 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ImageView imageView = view.findViewById(R.id.user_profile_picture_profile);
-        if (imageView.getDrawable() == null)
-            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+        imageView = view.findViewById(R.id.user_profile_picture_profile);
 
-        DataProcessor dataProcessor = new DataProcessor(getContext());
+        dataProcessor = new DataProcessor(getContext());
+        setExistingProfilePic();
+
         String email = dataProcessor.getEmail();
 
         textView = view.findViewById(R.id.email_user_profile);
         textView.setText(email);
+
+        view.findViewById(R.id.new_picture_profile).setOnClickListener(view1 -> {
+            try {
+                createImageFile();
+                dispatchTakePictureIntent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         ImageButton menuButton = view.findViewById(R.id.menu_button_profile_fragment);
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +120,43 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    private void setExistingProfilePic() {
+        String photoPath = dataProcessor.getProfilePicPhotoPath();
+        Log.d(TAG, photoPath + "");
+        if (photoPath != null) {
+            Uri uri = Uri.fromFile(new File(photoPath));
+            imageView.setImageURI(uri);
+        }
+        else if (imageView.getDrawable() == null) {
+            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.UK).format(new Date());
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(timestamp, ".png", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(requireContext(), getString(R.string.app_package), photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                activityResultLauncherCamera.launch(takePictureIntent);
+            }
+        }
+    }
+
     private void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, fragment);
@@ -110,6 +184,8 @@ public class ProfileFragment extends Fragment {
                 }
             }
         }
+
+        // TODO: Check if user profile pic is saved as new file, and if so delete it
 
         dataProcessor.clear();
 

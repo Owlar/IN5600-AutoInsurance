@@ -6,6 +6,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_FIRST_NAME;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_PHOTO_PATH;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
 import android.content.Context;
@@ -39,6 +40,15 @@ public class DataProcessor {
         this.context = ctx;
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
+    }
+
+    public String getProfilePicPhotoPath() {
+        return sharedPreferences.getString(KEY_PHOTO_PATH, null);
+    }
+
+    public void setProfilePicPhotoPath(String photoPath) {
+        editor.putString(KEY_PHOTO_PATH, photoPath);
+        editor.commit();
     }
 
     public String getUserId() {

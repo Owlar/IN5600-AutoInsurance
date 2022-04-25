@@ -44,13 +44,12 @@
         android:id="@+id/screenPhotoImageView"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:contentDescription="@string/claim_image_content_description"
         app:layout_constraintBottom_toTopOf="@id/backButtonPhotoScreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/screenPhotoTakePhotoButton"
-
-        android:contentDescription="@string/claim_image_content_description" />
+        app:layout_constraintTop_toBottomOf="@id/screenPhotoTakePhotoButton" />
 
 
     <TextView

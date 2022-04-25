@@ -11,4 +11,6 @@ public class SharedPreferencesConstants {
     public static final String KEY_CLAIMS = "KeyClaims";
 
     public static final String KEY_DISPLAY_MODE = "KeyDisplayMode";
+
+    public static final String KEY_PHOTO_PATH = "KeyPhotoPath";
 }

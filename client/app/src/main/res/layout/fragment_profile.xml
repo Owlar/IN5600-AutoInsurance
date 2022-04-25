@@ -21,18 +21,29 @@
         android:id="@+id/email_user_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:textSize="20sp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/menu_button_profile_fragment" />
 
     <ImageView
         android:id="@+id/user_profile_picture_profile"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:maxHeight="300dp"
         android:contentDescription="@string/user_picture_content_description_profile"
         app:layout_constraintTop_toBottomOf="@id/email_user_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/new_picture_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/new_picture_profile"
+        app:layout_constraintTop_toBottomOf="@id/user_profile_picture_profile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
