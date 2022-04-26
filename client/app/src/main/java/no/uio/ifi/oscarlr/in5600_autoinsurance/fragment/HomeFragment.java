@@ -2,6 +2,8 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment;
 
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_PATH_TO_SAVED_PHOTOS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.annotation.SuppressLint;
@@ -148,13 +150,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                                 if (file.exists()) {
                                     claim.setClaimPhotoBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
                                     claim.setClaimPhotoFilepath(keepNewFilepathFromServer[i]);
-                                    // Update server with new file path
-
-                                    //TODO Uncommenting gives error when logout/login multiple times. Gives error in server and no photo appears in list
-                                    // Something to do with filename maybe
-//                                    DataRepository dataRepository = new DataRepository(requireContext());
-//                                    StringRequest stringRequest = dataRepository.postRemoteUpdateClaim(String.valueOf(userID), String.valueOf(i), claim);
-//                                    VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
                                 }
                             }
                             else {
@@ -278,7 +273,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     }
 
     public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {
-        return new StringRequest(Request.Method.GET,  URL + "/getMethodDownloadPhoto?fileName=" + filename, new Response.Listener<String>() {
+        String fileName = SERVER_PATH_TO_SAVED_PHOTOS + filename + SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+        return new StringRequest(Request.Method.GET,  URL + "/getMethodDownloadPhoto?fileName=" + fileName, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Bitmap bitmap = convertBase64StringToBitmap(response);

@@ -1,5 +1,7 @@
 package no.uio.ifi.oscarlr.in5600_autoinsurance.repository;
 
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_FILETYPE_FOR_SAVED_PHOTOS;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.SERVER_PATH_TO_SAVED_PHOTOS;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.VolleyConstants.URL;
 
 import android.content.Context;
@@ -198,7 +200,7 @@ public class DataRepository {
                 Map<String, String> map = new HashMap<>();
                 map.put("userId", userId);
                 map.put("claimId", claimId);
-                map.put("fileName", claim.getClaimPhotoFilename());
+                map.put("fileName", SERVER_PATH_TO_SAVED_PHOTOS + claim.getClaimPhotoFilename() + SERVER_FILETYPE_FOR_SAVED_PHOTOS);
                 map.put("imageStringBase64", imageStringBase64);
                 return map;
             }

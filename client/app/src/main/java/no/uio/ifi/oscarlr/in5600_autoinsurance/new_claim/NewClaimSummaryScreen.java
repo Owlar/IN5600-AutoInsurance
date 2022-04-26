@@ -95,9 +95,6 @@ public class NewClaimSummaryScreen extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        // TODO: Consider another way to do this
-        /* It's here because ViewPager creates Summary screen and Location screen at the same time */
         setClaimDetails();
     }
 
