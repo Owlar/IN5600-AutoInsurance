@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.screen;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,9 +22,9 @@ import java.io.File;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
 
 public class NewClaimSummaryScreen extends Fragment {
 

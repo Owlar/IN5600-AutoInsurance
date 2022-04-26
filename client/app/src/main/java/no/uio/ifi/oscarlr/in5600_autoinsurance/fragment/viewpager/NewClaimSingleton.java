@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.singleton;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager;
 
 import java.util.ArrayList;
 import java.util.List;
