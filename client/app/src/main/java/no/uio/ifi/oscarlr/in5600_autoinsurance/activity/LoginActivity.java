@@ -27,7 +27,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -18,6 +18,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.ViewPagerAdapter;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen.NewClaimDescriptionScreen;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen.NewClaimIntroScreen;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen.NewClaimLocationScreen;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen.NewClaimPhotoScreen;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen.NewClaimSummaryScreen;
 
 public class NewClaimDialogFragment extends DialogFragment {
 

@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

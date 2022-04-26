@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.screen;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.FileUtils;
 
 public class NewClaimPhotoScreen extends Fragment {

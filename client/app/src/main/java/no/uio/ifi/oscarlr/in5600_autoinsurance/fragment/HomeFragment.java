@@ -53,10 +53,10 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewInterface;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimDialogFragment;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewpager.NewClaimDialogFragment;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.singleton.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.MapViewModel;
 

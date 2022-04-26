@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.util;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.singleton;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim;
+package no.uio.ifi.oscarlr.in5600_autoinsurance.singleton;
 
 import java.util.ArrayList;
 import java.util.List;
