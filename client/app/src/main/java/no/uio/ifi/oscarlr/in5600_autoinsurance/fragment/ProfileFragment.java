@@ -51,9 +51,14 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                            Uri uri = Uri.fromFile(new File(currentPhotoPath));
+                            File f = new File(currentPhotoPath);
+                            Uri uri = Uri.fromFile(f);
                             imageView.setImageURI(uri);
                             dataProcessor.setProfilePicPhotoPath(currentPhotoPath);
+
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            mediaScanIntent.setData(uri);
+                            requireActivity().sendBroadcast(mediaScanIntent);
                         }
                     }
                 }
@@ -182,6 +187,21 @@ public class ProfileFragment extends Fragment {
                 }
             }
         }
+
+        // Delete profile photo
+        if (dataProcessor.getProfilePicPhotoPath() != null) {
+            File profilePhoto = new File(dataProcessor.getProfilePicPhotoPath());
+            if (profilePhoto.exists()) {
+                boolean b = profilePhoto.delete();
+                Log.d(TAG, "Profile photo was deleted: " + b);
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(Uri.fromFile(profilePhoto));
+                if (getContext() != null) {
+                    getContext().sendBroadcast(intent);
+                }
+            }
+        }
+
 
         dataProcessor.clear();
 
