@@ -281,7 +281,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 if (bitmap != null) {
                     File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     try {
-                        File imageFile = File.createTempFile(filename, ".png", storageDir);
+                        File imageFile = new File(storageDir, filename + ".png");
                         try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
                             keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
