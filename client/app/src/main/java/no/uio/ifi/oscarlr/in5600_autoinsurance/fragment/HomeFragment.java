@@ -67,8 +67,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private int numberOfClaims = 0;
     private final int MAX_NUMBER_OF_CLAIMS = 5;
     private List<Claim> claims;
-    private final String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
-    private AtomicInteger keepNewFilepathFromServerCounter;
+    private AtomicInteger downloadPhotosFromServerCounter;
     private ClaimDetailsViewModel claimDetailsViewModel;
     private MapViewModel mapViewModel;
 
@@ -77,7 +76,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        keepNewFilepathFromServerCounter = new AtomicInteger();
+        downloadPhotosFromServerCounter = new AtomicInteger();
     }
 
     @Override
@@ -145,19 +144,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                             claim.setClaimPhotoFilepath(filepathSavedOnServer);
                         }
                         else {
-                            if (keepNewFilepathFromServer[i] != null) {
-                                file = new File(keepNewFilepathFromServer[i]);
-                                if (file.exists()) {
-                                    claim.setClaimPhotoBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-                                    claim.setClaimPhotoFilepath(keepNewFilepathFromServer[i]);
-                                }
-                            }
-                            else {
-                                // Download photo from server and save locally in "Pictures" directory
-                                StringRequest stringRequest = getMethodDownloadPhoto(claim.getClaimPhotoFilename(), i, view);
-                                stringRequests.add(stringRequest);
-                                waitingOnServerPhotoDownload = true;
-                            }
+                            // Download photo from server and save locally
+                            StringRequest stringRequest = getMethodDownloadPhoto(claim.getClaimPhotoFilename(), filepathSavedOnServer, view);
+                            stringRequests.add(stringRequest);
+                            waitingOnServerPhotoDownload = true;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -165,7 +155,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                     claims.add(claim);
                 }
                 if (waitingOnServerPhotoDownload) {
-                    keepNewFilepathFromServerCounter.set(stringRequests.size());
+                    downloadPhotosFromServerCounter.set(stringRequests.size());
                     for (StringRequest stringRequest : stringRequests) {
                         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
                     }
@@ -272,19 +262,21 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         seeMapFragmentWithMarkedPosition();
     }
 
-    public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {
+    public StringRequest getMethodDownloadPhoto(String filename, String fullFilepath, View view) {
         String fileName = SERVER_PATH_TO_SAVED_PHOTOS + filename + SERVER_FILETYPE_FOR_SAVED_PHOTOS;
         return new StringRequest(Request.Method.GET,  URL + "/getMethodDownloadPhoto?fileName=" + fileName, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Bitmap bitmap = convertBase64StringToBitmap(response);
                 if (bitmap != null) {
-                    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     try {
-                        File imageFile = new File(storageDir, filename + ".png");
+                        if (fullFilepath.contains("/Camera/")) {
+                            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera");
+                            boolean b = f.mkdir();
+                        }
+                        File imageFile = new File(fullFilepath);
                         try (FileOutputStream fileOutputStream = new FileOutputStream(imageFile)) {
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                            keepNewFilepathFromServer[claimId] = imageFile.getAbsolutePath();
 
                             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                             Uri contentUri = Uri.fromFile(imageFile);
@@ -295,7 +287,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         e.printStackTrace();
                     }
 
-                    int photosSavedLeftTodo = keepNewFilepathFromServerCounter.decrementAndGet();
+                    int photosSavedLeftTodo = downloadPhotosFromServerCounter.decrementAndGet();
                     if (photosSavedLeftTodo == 0) {
                         // Last claim to download photo
                         createRecyclerView(view);

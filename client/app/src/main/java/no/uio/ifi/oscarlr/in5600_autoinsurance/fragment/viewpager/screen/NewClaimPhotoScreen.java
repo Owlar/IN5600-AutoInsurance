@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +19,21 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.FileUtils;
 
 public class NewClaimPhotoScreen extends Fragment {
 
@@ -37,7 +41,7 @@ public class NewClaimPhotoScreen extends Fragment {
     private final ActivityResultLauncher<Intent> activityResultLauncherPhotoGallery;
     private final ActivityResultLauncher<Intent> activityResultLauncherCamera;
     private ImageView imageView;
-    private String currentPhotoPath;
+    private String currentPhotoPath, currentFilename;
     private final NewClaimSingleton newClaimSingleton;
     private final int replaceClaimWithID;
 
@@ -58,10 +62,8 @@ public class NewClaimPhotoScreen extends Fragment {
                             setPhotoBitmapForSingleton(uri);
                         }
                         else {
-//                            Log.d("test", "camera result ikke ok");
                             File file = new File(currentPhotoPath);
                             boolean b = file.delete();
-//                            Log.d("test", "file deleted:" + b);
                         }
                     }
                 }
@@ -76,8 +78,25 @@ public class NewClaimPhotoScreen extends Fragment {
                             imageView.setImageURI(result.getData().getData());
                             // Get correct filepath back
                             Uri uri = result.getData().getData();
-                            FileUtils fileUtils = new FileUtils(getContext());
-                            currentPhotoPath = fileUtils.getPath(uri);
+                            String picturesDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+                            String dcimDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+                            String cameraDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera";
+                            String downloadsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+                            String documentsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
+                            List<String> directories = Arrays.asList(picturesDirectory, dcimDirectory, cameraDirectory, downloadsDirectory, documentsDirectory);
+                            try {
+                                String filename = Objects.requireNonNull(DocumentFile.fromSingleUri(requireContext(), uri)).getName();
+                                for (String directory : directories) {
+                                    File f = new File(directory + "/" + filename);
+                                    if (f.exists()) {
+                                        currentPhotoPath = directory + "/" + filename;
+                                        currentFilename = filename;
+                                        break;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                             setPhotoBitmapForSingleton(uri);
                         }
@@ -98,10 +117,9 @@ public class NewClaimPhotoScreen extends Fragment {
                 Toast.makeText(requireContext(), "Please select a photo", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (replaceClaimWithID == -1) {
-                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilepath(currentPhotoPath);
-                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilename(currentPhotoPath);
-            }
+            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilepath(currentPhotoPath);
+            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilename(currentFilename);
+
             viewPager.setCurrentItem(3);
         });
 
@@ -143,6 +161,8 @@ public class NewClaimPhotoScreen extends Fragment {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(timestamp, ".png", storageDir);
         currentPhotoPath = image.getAbsolutePath();
+        String[] pathSplit = currentPhotoPath.split("/");
+        currentFilename = pathSplit[pathSplit.length-1];
         return image;
     }
 
