@@ -56,6 +56,14 @@
                 android:text="@string/claim_card_see_details_button_text"
                 style="?attr/borderlessButtonStyle" />
 
+            <ImageButton
+                android:id="@+id/cardSeeLocationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:tint="@color/blue_variant"
+                style="?attr/borderlessButtonStyle" />
+
         </LinearLayout>
 
     </LinearLayout>

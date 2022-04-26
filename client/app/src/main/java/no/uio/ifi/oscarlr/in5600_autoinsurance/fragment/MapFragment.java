@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -28,12 +29,16 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.MapViewModel;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
 
     private static final String TAG = "MapFragment";
+
+    private MapViewModel mapViewModel;
+    private String markerId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
+
+        mapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
+        mapViewModel.getClaimId().observe(getViewLifecycleOwner(), claimId -> {
+            markerId = claimId;
+        });
 
         return view;
     }
@@ -90,6 +100,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             assert marker != null;
 
             marker.setTag(claim.getClaimId());
+
+            if (Objects.equals(marker.getTag(), markerId)) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 13));
+            }
         }
     }
 

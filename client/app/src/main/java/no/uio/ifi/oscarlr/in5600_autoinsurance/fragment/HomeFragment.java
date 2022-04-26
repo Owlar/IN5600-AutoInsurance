@@ -56,6 +56,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.new_claim.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.MapViewModel;
 
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private final String[] keepNewFilepathFromServer = new String[5]; // Filepath to new local file from photo stored on server
     private AtomicInteger keepNewFilepathFromServerCounter;
     private ClaimDetailsViewModel claimDetailsViewModel;
+    private MapViewModel mapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
 
         claimDetailsViewModel = new ViewModelProvider(requireActivity()).get(ClaimDetailsViewModel.class);
+        mapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
 
         createRecyclerView(view);
 
@@ -110,6 +113,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         int userID = sharedPreferences.getInt(KEY_ID, 0);
         NewClaimSingleton newClaimSingleton = NewClaimSingleton.getInstance();
 
+        // It's here and not in DataRepository because of RecyclerView
         @SuppressLint("NotifyDataSetChanged")
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, URL +"/getMethodMyClaims?id=" + userID, null, response -> {
             try {
@@ -258,6 +262,19 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     public void onSeeDetailsClick(int position) {
         claimDetailsViewModel.setObject(position);
         seeClaimDetails();
+    }
+
+    private void seeMapFragmentWithMarkedPosition() {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, new MapFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSeeLocationClick(int position) {
+        mapViewModel.setClaimId(String.valueOf(position));
+        seeMapFragmentWithMarkedPosition();
     }
 
     public StringRequest getMethodDownloadPhoto(String filename, int claimId, View view) {

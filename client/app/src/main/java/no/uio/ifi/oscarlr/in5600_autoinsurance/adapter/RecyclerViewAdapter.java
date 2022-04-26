@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private final RecyclerViewInterface recyclerViewInterface;
     private boolean disableReplaceButtons = false;
     private boolean disableSeeDetailsButtons = false;
+    private boolean disableSeeLocationButtons = false;
 
     public RecyclerViewAdapter(Context context, List<Claim> claims, RecyclerViewInterface recyclerViewInterface) {
         this.inflater = LayoutInflater.from(context);
@@ -65,6 +67,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (disableSeeDetailsButtons) {
             holder.seeDetailsButton.setEnabled(false);
         }
+
+        if (disableSeeLocationButtons) {
+            holder.seeLocationButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -80,11 +86,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         disableSeeDetailsButtons = true;
     }
 
+    public void setDisableSeeLocationButtons() {
+        disableSeeLocationButtons = true;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView description;
         ImageView imageView;
         Button replaceButton;
         Button seeDetailsButton;
+        ImageButton seeLocationButton;
 
         public ViewHolder(View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
@@ -93,6 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageView = itemView.findViewById(R.id.cardPhoto);
             replaceButton = itemView.findViewById(R.id.cardReplaceButton);
             seeDetailsButton = itemView.findViewById(R.id.cardSeeDetailsButton);
+            seeLocationButton = itemView.findViewById(R.id.cardSeeLocationButton);
 
             itemView.findViewById(R.id.cardReplaceButton).setOnClickListener(view -> {
                 if (recyclerViewInterface != null) {
@@ -110,6 +122,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     if (position != RecyclerView.NO_POSITION) {
                         recyclerViewInterface.onSeeDetailsClick(position);
+                    }
+                }
+            });
+
+            itemView.findViewById(R.id.cardSeeLocationButton).setOnClickListener(view -> {
+                if (recyclerViewInterface != null) {
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onSeeLocationClick(position);
                     }
                 }
             });
