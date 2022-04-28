@@ -51,6 +51,11 @@ public class DataRepository {
             @Override
             public void onResponse(String response) {
                 try {
+                    if (response.isEmpty()) {
+                        Log.d(TAG, response);
+                        Toast.makeText(ctx, "Wrong email or password", Toast.LENGTH_SHORT).show();
+                    }
+
                     JSONObject jsonObject = new JSONObject(response);
 
                     User user = new User(
