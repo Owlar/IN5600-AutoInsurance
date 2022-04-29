@@ -7,6 +7,7 @@ public class SharedPreferencesConstants {
     public static final String KEY_FIRST_NAME = "KeyFirstName";
     public static final String KEY_LAST_NAME = "KeyLastName";
     public static final String KEY_EMAIL = "KeyEmail";
+    public static final String KEY_PASSWORD_HASH = "KeyPasswordHash";
 
     public static final String KEY_CLAIMS = "KeyClaims";
 

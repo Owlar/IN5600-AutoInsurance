@@ -25,9 +25,10 @@ import java.util.Map;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.IntentConstants;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
+
+    private String modifiedPasswordHash;
+
+    private LoginViewModel viewModel;
+    private DataProcessor dataProcessor;
 
     private ActivityResultLauncher<String[]> activityResultLauncherPermissions;
 
@@ -46,7 +52,15 @@ public class LoginActivity extends AppCompatActivity {
 
         getSavedDisplayMode();
 
-        DataProcessor dataProcessor = new DataProcessor(getApplicationContext());
+        Intent intent = getIntent();
+        String modifiedPassword = intent.getStringExtra(IntentConstants.MODIFIED_PASSWORD);
+        if (modifiedPassword != null) modifiedPasswordHash = Hash.toMD5(modifiedPassword);
+
+        dataProcessor = new DataProcessor(getApplicationContext());
+        if (modifiedPasswordHash != null) {
+            Log.d(TAG, modifiedPasswordHash);
+            dataProcessor.setPasswordHash(modifiedPasswordHash);
+        }
 
         activityResultLauncherPermissions = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
@@ -71,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
         activityResultLauncherPermissions.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
 
-        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         email = findViewById(R.id.editText_email_login);
         password = findViewById(R.id.editText_password_login);
@@ -127,9 +141,42 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        DataRepository dataRepository = new DataRepository(getApplicationContext());
-        StringRequest stringRequest = dataRepository.postRemoteLogin(email.getText().toString(), Hash.toMD5(password.getText().toString()));
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        DataRepository dataRepository;
+        // If password has been recently changed before logging out
+        if (dataProcessor.getPasswordHash() != null) {
+            Toast.makeText(getApplicationContext(), "Password was recently changed", Toast.LENGTH_SHORT).show();
+
+            String tempStoredPasswordHash = dataProcessor.getPasswordHash();
+            // Only clears modified password, because there is no other data yet
+            dataProcessor.clear();
+
+            dataRepository = new DataRepository(getApplicationContext());
+            dataRepository.postRemoteLoginWithModifiedPassword(
+                    email.getText().toString(),
+                    Hash.toMD5(password.getText().toString())
+            );
+
+            if (tempStoredPasswordHash.equals(Hash.toMD5(password.getText().toString()))) {
+
+                /* Since password was recently updated without notifying the server,
+                prevent user from logging in with two different passwords */
+                StringRequest stringRequest = dataRepository.postRemoteNotifyServerPasswordChange(
+                        email.getText().toString(),
+                        password.getText().toString(),
+                        Hash.toMD5(password.getText().toString())
+                );
+                VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+        } else {
+            dataRepository = new DataRepository(getApplicationContext());
+            StringRequest stringRequest = dataRepository.postRemoteLogin(email.getText().toString(), Hash.toMD5(password.getText().toString()));
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        }
     }
 
     private void getSavedDisplayMode() {

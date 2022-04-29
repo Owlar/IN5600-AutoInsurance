@@ -2,12 +2,9 @@ package no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.screen;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,10 +36,11 @@ import java.io.IOException;
 import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.NetworkUtil;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -117,7 +115,7 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (isNetworkAvailable()) {
+                if (NetworkUtil.isNetworkAvailable(requireContext())) {
                     return searchLocation();
                 }
                 Toast.makeText(requireContext(), "No network connection", Toast.LENGTH_SHORT).show();
@@ -155,12 +153,6 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
             }
         }
         return false;
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 
     @Override

@@ -20,11 +20,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 public class NewClaimSummaryScreen extends Fragment {
 
@@ -109,16 +109,18 @@ public class NewClaimSummaryScreen extends Fragment {
         description.setText(claim.getClaimDes());
         location.setText(claim.getClaimLocation());
 
-        File f = new File(claim.getClaimPhotoFilepath());
-        if (f.exists())
-            imageView.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+        if (claim.getClaimPhotoFilepath() != null) {
+            File f = new File(claim.getClaimPhotoFilepath());
+            if (f.exists())
+                imageView.setImageBitmap(BitmapFactory.decodeFile(f.getAbsolutePath()));
+        }
     }
 
     private String convertImageToString() {
         Bitmap bitmap = newClaimSingleton.getClaim(replaceClaimWithID).getClaimPhotoBitmap();;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] bytes = baos.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 }

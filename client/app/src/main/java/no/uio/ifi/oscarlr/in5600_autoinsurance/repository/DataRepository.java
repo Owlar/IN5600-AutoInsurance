@@ -54,23 +54,23 @@ public class DataRepository {
                     if (response.isEmpty()) {
                         Log.d(TAG, response);
                         Toast.makeText(ctx, "Wrong email or password", Toast.LENGTH_SHORT).show();
+                    } else {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        User user = new User(
+                                jsonObject.getInt("id"),
+                                jsonObject.getString("firstName"),
+                                jsonObject.getString("lastName"),
+                                jsonObject.getString("passClear"),
+                                jsonObject.getString("passHash"),
+                                jsonObject.getString("email")
+                        );
+                        dataProcessor.setUser(user);
+
+                        Intent intent = new Intent(ctx, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        ctx.startActivity(intent);
                     }
-
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    User user = new User(
-                            jsonObject.getInt("id"),
-                            jsonObject.getString("firstName"),
-                            jsonObject.getString("lastName"),
-                            jsonObject.getString("passClear"),
-                            jsonObject.getString("passHash"),
-                            jsonObject.getString("email")
-                    );
-                    dataProcessor.setUser(user);
-
-                    Intent intent = new Intent(ctx, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    ctx.startActivity(intent);
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
                 }
@@ -79,7 +79,7 @@ public class DataRepository {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(ctx, "Couldn't login, please try again!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "Couldn't login due to server issues, please try again!", Toast.LENGTH_SHORT).show();
             }
         }) {
             @NonNull
@@ -91,6 +91,51 @@ public class DataRepository {
                 return map;
             }
         };
+    }
+
+    public void postRemoteLoginWithModifiedPassword(String email, String password) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL + "/methodPostRemoteLogin", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    if (response.isEmpty()) {
+                        Log.d(TAG, response);
+                        Toast.makeText(ctx, "Wrong password due to new instance of server", Toast.LENGTH_SHORT).show();
+                    } else {
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        User user = new User(
+                                jsonObject.getInt("id"),
+                                jsonObject.getString("firstName"),
+                                jsonObject.getString("lastName"),
+                                jsonObject.getString("passClear"),
+                                jsonObject.getString("passHash"),
+                                jsonObject.getString("email")
+                        );
+                        dataProcessor.setUser(user);
+                        dataProcessor.setPasswordHash(user.getPassClear());
+                    }
+
+                } catch (JSONException jsonException) {
+                    jsonException.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("em", email);
+                map.put("ph", password);
+                return map;
+            }
+        };
+        VolleySingleton.getInstance(ctx).addToRequestQueue(stringRequest);
     }
 
     public StringRequest postRemoteChangePassword(String email, EditText newPassword, EditText confirmNewPassword, FragmentTransaction fragmentTransaction) {
@@ -125,6 +170,37 @@ public class DataRepository {
                 map.put("em", email);
                 map.put("np", newPassword.getText().toString());
                 map.put("ph", Hash.toMD5(newPassword.getText().toString()));
+                return map;
+            }
+        };
+    }
+
+    public StringRequest postRemoteNotifyServerPasswordChange(String email, String newPassword, String newPasswordHash) {
+        return new StringRequest(Request.Method.POST, URL + "/methodPostChangePasswd", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    if (response.equals("OK")) {
+                        Log.d(TAG, "Change password to notify server: " + response);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(ctx.getApplicationContext(), "Couldn't change password, please try again!", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("em", email);
+                map.put("np", newPassword);
+                map.put("ph", newPasswordHash);
                 return map;
             }
         };

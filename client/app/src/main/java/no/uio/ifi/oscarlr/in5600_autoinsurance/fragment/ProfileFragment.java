@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +36,13 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.activity.LoginActivity;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.IntentConstants;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel;
 
 public class ProfileFragment extends Fragment {
 
     private DataProcessor dataProcessor;
+    private ChangePasswordViewModel changePasswordViewModel;
     private TextView textView;
     private ImageView imageView;
     private String currentPhotoPath;
@@ -77,6 +81,8 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageView = view.findViewById(R.id.user_profile_picture_profile);
+
+        changePasswordViewModel = new ViewModelProvider(requireActivity()).get(ChangePasswordViewModel.class);
 
         dataProcessor = new DataProcessor(getContext());
         setExistingProfilePic();
@@ -206,6 +212,7 @@ public class ProfileFragment extends Fragment {
         dataProcessor.clear();
 
         Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.putExtra(IntentConstants.MODIFIED_PASSWORD, changePasswordViewModel.getFinalModified().getValue());
         startActivity(intent);
 
         requireActivity().finish();

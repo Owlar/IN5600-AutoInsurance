@@ -20,8 +20,8 @@ import com.android.volley.toolbox.StringRequest;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.DataRepository;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ChangePasswordViewModel;
 
 public class ChangePasswordFragment extends Fragment {
@@ -33,6 +33,8 @@ public class ChangePasswordFragment extends Fragment {
 
     private String email;
     private String newPassword;
+
+    private ChangePasswordViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class ChangePasswordFragment extends Fragment {
         editText_newPassword = view.findViewById(R.id.editText_new_password);
         editText_confirmNewPassword = view.findViewById(R.id.editText_confirm_new_password);
 
-        ChangePasswordViewModel viewModel = new ViewModelProvider(requireActivity()).get(ChangePasswordViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ChangePasswordViewModel.class);
 
         viewModel.getNewPassword().observe(getViewLifecycleOwner(), newPassword -> {
             if (!editText_newPassword.getText().toString().equals(newPassword))
@@ -126,6 +128,9 @@ public class ChangePasswordFragment extends Fragment {
         );
 
         VolleySingleton.getInstance(requireActivity().getApplicationContext()).addToRequestQueue(stringRequest);
+
+        // Set to ViewModel again in order to keep final modified password in case of server change
+        viewModel.setFinalModified(editText_confirmNewPassword.getText().toString());
     }
 
 }

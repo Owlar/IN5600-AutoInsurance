@@ -52,11 +52,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewAdapter;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.adapter.RecyclerViewInterface;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimDialogFragment;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.repository.VolleySingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.MapViewModel;
 

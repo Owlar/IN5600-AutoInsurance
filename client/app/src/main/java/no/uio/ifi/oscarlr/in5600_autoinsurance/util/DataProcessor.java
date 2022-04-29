@@ -6,6 +6,7 @@ import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPrefer
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_FIRST_NAME;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_ID;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_LAST_NAME;
+import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_PASSWORD_HASH;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.KEY_PHOTO_PATH;
 import static no.uio.ifi.oscarlr.in5600_autoinsurance.util.constant.SharedPreferencesConstants.SHARED_PREFERENCES;
 
@@ -61,6 +62,17 @@ public class DataProcessor {
 
     public String getEmail() {
         return sharedPreferences.getString(KEY_EMAIL, "0");
+    }
+
+    /* Not as part of setUser() because it's only used when password is modified */
+    public String getPasswordHash() {
+        return sharedPreferences.getString(KEY_PASSWORD_HASH, null);
+    }
+
+    /* Not as part of setUser() because it's only used when password is modified */
+    public void setPasswordHash(String password) {
+        editor.putString(KEY_PASSWORD_HASH, password);
+        editor.apply();
     }
 
     public void setUser(User user) {

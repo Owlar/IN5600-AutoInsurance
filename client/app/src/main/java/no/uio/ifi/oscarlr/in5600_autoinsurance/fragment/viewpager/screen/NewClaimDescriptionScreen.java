@@ -15,8 +15,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import java.util.Objects;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.R;
-import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.fragment.viewpager.NewClaimSingleton;
+import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 
 

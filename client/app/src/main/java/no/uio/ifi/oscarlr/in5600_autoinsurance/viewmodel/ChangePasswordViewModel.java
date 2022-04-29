@@ -8,6 +8,7 @@ public class ChangePasswordViewModel extends ViewModel {
 
     private MutableLiveData<String> newPassword = new MutableLiveData<>();
     private MutableLiveData<String> confirmNewPassword = new MutableLiveData<>();
+    private MutableLiveData<String> finalModified = new MutableLiveData<>();
 
     public LiveData<String> getNewPassword() {
         return newPassword;
@@ -17,12 +18,20 @@ public class ChangePasswordViewModel extends ViewModel {
         return confirmNewPassword;
     }
 
+    public LiveData<String> getFinalModified() {
+        return finalModified;
+    }
+
     public void setNewPassword(String s) {
         newPassword.setValue(s);
     }
 
     public void setConfirmNewPassword(String s) {
         confirmNewPassword.setValue(s);
+    }
+
+    public void setFinalModified(String s) {
+        finalModified.setValue(s);
     }
 
 }

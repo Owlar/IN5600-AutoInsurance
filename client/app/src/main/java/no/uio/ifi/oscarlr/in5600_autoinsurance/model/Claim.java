@@ -79,6 +79,7 @@ public class Claim {
     }
 
     public void setClaimPhotoFilename(String claimPhotoFilename) {
+        if (claimPhotoFilename == null) return;
         String[] filepathSplit = claimPhotoFilename.split("/");
         String lastSection = filepathSplit[filepathSplit.length - 1];
         this.claimPhotoFilename = lastSection.split("\\.")[0];
