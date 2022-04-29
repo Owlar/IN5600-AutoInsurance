@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?colorOnPrimary"
     tools:context=".fragment.viewpager.screen.NewClaimIntroScreen">
 
     <TextView
@@ -44,7 +44,7 @@
         android:id="@+id/mapSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?colorOnPrimary"
         android:iconifiedByDefault="false"
         app:queryHint="@string/new_claim_location_search"
         app:layout_constraintStart_toStartOf="parent"
