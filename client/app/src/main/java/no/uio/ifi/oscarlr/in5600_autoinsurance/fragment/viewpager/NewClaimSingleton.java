@@ -5,6 +5,7 @@ import java.util.List;
 
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 
+/* Singleton for add/replace claim in ViewPager2 */
 public class NewClaimSingleton {
     private static NewClaimSingleton instance;
     private Claim newClaim;

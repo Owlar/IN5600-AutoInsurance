@@ -93,6 +93,8 @@ public class NewClaimSummaryScreen extends Fragment {
         return view;
     }
 
+    /* It's done here because of ViewPager2's page off limit,
+    and removing off limit defeats a purpose of ViewPager2 */
     @Override
     public void onResume() {
         super.onResume();

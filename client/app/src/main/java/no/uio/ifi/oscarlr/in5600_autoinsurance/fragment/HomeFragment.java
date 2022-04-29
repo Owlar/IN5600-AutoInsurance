@@ -263,6 +263,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         seeMapFragmentWithMarkedPosition();
     }
 
+    // It's here and not in DataRepository because of RecyclerView
     public StringRequest getMethodDownloadPhoto(String filename, String fullFilepath, View view) {
         String fileName = SERVER_PATH_TO_SAVED_PHOTOS + filename + SERVER_FILETYPE_FOR_SAVED_PHOTOS;
         return new StringRequest(Request.Method.GET,  URL + "/getMethodDownloadPhoto?fileName=" + fileName, new Response.Listener<String>() {

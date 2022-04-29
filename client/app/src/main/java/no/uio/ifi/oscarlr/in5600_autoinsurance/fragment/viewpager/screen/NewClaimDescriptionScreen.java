@@ -65,7 +65,10 @@ public class NewClaimDescriptionScreen extends Fragment {
     }
 
 
-
+    /**
+     * Set the initial description of the claim if the claim is being updated
+     * @param editText The EditText
+     */
     private void setClaimDescriptionIfUpdatingClaim(EditText editText) {
         if (replaceClaimWithID != -1) {
             DataProcessor dataProcessor = new DataProcessor(requireContext());

@@ -125,6 +125,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Login to the app
+     * @param view The view
+     */
     public void login(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncherPermissions.launch(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE});
@@ -179,6 +183,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get display mode from DataProcessor and set the app theme. Light is default.
+     */
     private void getSavedDisplayMode() {
         DataProcessor dataProcessor = new DataProcessor(this);
         String displayMode = dataProcessor.getDisplayMode();

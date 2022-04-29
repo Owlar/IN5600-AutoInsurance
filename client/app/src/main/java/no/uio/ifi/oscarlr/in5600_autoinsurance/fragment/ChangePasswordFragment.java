@@ -129,7 +129,7 @@ public class ChangePasswordFragment extends Fragment {
 
         VolleySingleton.getInstance(requireActivity().getApplicationContext()).addToRequestQueue(stringRequest);
 
-        // Set to ViewModel again in order to keep final modified password in case of server change
+        /* Set to ViewModel again in order to keep final modified password in case of server change */
         viewModel.setFinalModified(editText_confirmNewPassword.getText().toString());
     }
 

@@ -95,7 +95,13 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         return view;
     }
 
-    // Needed because of ViewPager
+    /**
+     * This is needed because of using Google Maps in ViewPager2
+     *
+     * Setup the map view with Google Maps
+     * @param view
+     * @param savedInstanceState
+     */
     private void setupMapView(View view, Bundle savedInstanceState) {
         MapView mapView = view.findViewById(R.id.new_claim_map);
         mapView.onCreate(savedInstanceState);
@@ -109,6 +115,12 @@ public class NewClaimLocationScreen extends Fragment implements OnMapReadyCallba
         mapView.getMapAsync(this);
     }
 
+    /**
+     * Setup the search.
+     * If a network connection is available, search for the location from query
+     * Else, notify the user of no internet connection
+     * @param view The view
+     */
     private void setupSearch(View view) {
         searchView = view.findViewById(R.id.mapSearchView);
         searchView.setSubmitButtonEnabled(true);

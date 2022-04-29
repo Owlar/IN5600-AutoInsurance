@@ -145,6 +145,9 @@ public class NewClaimPhotoScreen extends Fragment {
         return view;
     }
 
+    /**
+     * Set the initial claim photo if the claim is being updated
+     */
     private void setClaimPhotoIfUpdatingClaim() {
         if (replaceClaimWithID != -1) {
             try {
@@ -157,6 +160,11 @@ public class NewClaimPhotoScreen extends Fragment {
         }
     }
 
+    /**
+     * Create image file
+     * @return The image
+     * @throws IOException The exception
+     */
     private File createImageFile() throws IOException {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.UK).format(new Date());
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);

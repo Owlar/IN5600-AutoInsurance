@@ -172,6 +172,11 @@ public class ProfileFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Log out current user and delete data structures.
+     * Also delete stored claim images and profile picture images
+     * Lastly, create explicit intent with modified password to notify server in case of server issues
+     */
     public void logout() {
         DataProcessor dataProcessor = new DataProcessor(requireActivity());
 

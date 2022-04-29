@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Load the fragment that was selected
+     * @param fragment The fragment to be loaded
+     */
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_view, fragment)

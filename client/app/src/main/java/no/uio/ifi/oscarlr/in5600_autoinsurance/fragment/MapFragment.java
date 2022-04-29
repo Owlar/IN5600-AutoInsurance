@@ -31,6 +31,7 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.MapUtil;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.ClaimDetailsViewModel;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.viewmodel.MapViewModel;
 
+/* The main Google Map which can be navigated to from bottom navigation */
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;

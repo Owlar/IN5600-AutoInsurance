@@ -34,7 +34,6 @@ import no.uio.ifi.oscarlr.in5600_autoinsurance.util.ClaimStatus;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.DataProcessor;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.util.Hash;
 
-/* DataRepository with Volley requests. Don't need to use AsyncTask because Volley already manages network related tasks on a separate thread */
 public class DataRepository {
 
     private final Context ctx;

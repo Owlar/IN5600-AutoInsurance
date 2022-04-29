@@ -29,6 +29,7 @@ import java.util.List;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.Claim;
 import no.uio.ifi.oscarlr.in5600_autoinsurance.model.User;
 
+/* Handle data to and from Shared Preferences */
 public class DataProcessor {
 
     private final Context context;
