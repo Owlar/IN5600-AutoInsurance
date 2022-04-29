@@ -38,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -250,10 +251,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     }
 
     private void seeMapFragmentWithMarkedPosition() {
-        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_view, new MapFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        if (getActivity() != null) {
+            BottomNavigationView bnv = getActivity().findViewById(R.id.bottomNavigationView);
+            bnv.setSelectedItemId(R.id.map);
+        }
     }
 
     @Override

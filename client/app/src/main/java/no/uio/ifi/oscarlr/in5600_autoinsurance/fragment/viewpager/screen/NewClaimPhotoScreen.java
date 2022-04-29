@@ -116,8 +116,10 @@ public class NewClaimPhotoScreen extends Fragment {
                 Toast.makeText(requireContext(), "Please select a photo", Toast.LENGTH_SHORT).show();
                 return;
             }
-            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilepath(currentPhotoPath);
-            newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilename(currentFilename);
+            if (replaceClaimWithID == -1 || (currentFilename != null && currentPhotoPath != null)) {
+                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilepath(currentPhotoPath);
+                newClaimSingleton.getClaim(replaceClaimWithID).setClaimPhotoFilename(currentFilename);
+            }
 
             viewPager.setCurrentItem(3);
         });
